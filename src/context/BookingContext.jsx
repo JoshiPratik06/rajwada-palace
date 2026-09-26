@@ -10,19 +10,17 @@ const bookingReducer = (state, action) => {
     case 'ADD_BOOKING': {
       const newBooking = {
         ...action.payload,
-        id: `RJW${Date.now()}`,
+        id: action.payload.id || `RJW${Date.now()}`,
         status: 'confirmed',
         createdAt: new Date().toISOString(),
       };
       const updatedBookings = [...state.bookings, newBooking];
-      localStorage.setItem('bookings', JSON.stringify(updatedBookings));
       return { ...state, bookings: updatedBookings, currentBooking: newBooking };
     }
     case 'CANCEL_BOOKING': {
       const updated = state.bookings.map(b =>
         b.id === action.payload ? { ...b, status: 'cancelled' } : b
       );
-      localStorage.setItem('bookings', JSON.stringify(updated));
       return { ...state, bookings: updated };
     }
     case 'SET_CURRENT':
@@ -58,12 +56,15 @@ export const BookingProvider = ({ children }) => {
   const [state, dispatch] = useReducer(bookingReducer, initialState);
 
   useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(state.wishlist));
-  }, [state.wishlist]);
-
-  useEffect(() => {
-    localStorage.setItem('recentlyViewed', JSON.stringify(state.recentlyViewed));
-  }, [state.recentlyViewed]);
+    try {
+      localStorage.setItem('bookings', JSON.stringify(state.bookings));
+      localStorage.setItem('wishlist', JSON.stringify(state.wishlist));
+      localStorage.setItem('recentlyViewed', JSON.stringify(state.recentlyViewed));
+    } catch (error) {
+      console.error('Unable to save local demo booking data', error);
+      toast.error('Browser storage is unavailable. Your latest changes may not persist.');
+    }
+  }, [state.bookings, state.wishlist, state.recentlyViewed]);
 
   const setSearch = (data) => dispatch({ type: 'SET_SEARCH', payload: data });
 
@@ -121,4 +122,3 @@ export const useBooking = () => {
   if (!ctx) throw new Error('useBooking must be used within BookingProvider');
   return ctx;
 };
-

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Crown } from 'lucide-react';
+import BrandMark from './BrandMark';
 
 const LoadingPage = () => {
   return (
@@ -22,7 +22,7 @@ const LoadingPage = () => {
           transition={{ duration: 0.5, delay: 0.2, ease: 'backOut' }}
           className="mb-4"
         >
-          <Crown size={42} className="text-[#c5a059]" strokeWidth={1.4} />
+          <BrandMark className="w-14 h-14 text-[#c5a059]" />
         </motion.div>
 
         {/* Hotel name */}

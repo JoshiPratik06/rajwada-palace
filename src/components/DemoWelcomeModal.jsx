@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles,
@@ -14,9 +14,26 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+const CONTACT_EMAIL = 'pratikjoshi0068@gmail.com';
+
 export default function DemoWelcomeModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    const previouslyFocused = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialogRef.current?.querySelector('button[aria-label="Close alert"]')?.focus();
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     // Check if the user has already dismissed the alert during this session
@@ -36,9 +53,9 @@ export default function DemoWelcomeModal() {
   };
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText('pratikjoshi0068@gmail.com');
+    navigator.clipboard.writeText(CONTACT_EMAIL);
     setCopied(true);
-    toast.success('Email copied: pratikjoshi0068@gmail.com');
+    toast.success(`Email copied: ${CONTACT_EMAIL}`);
     setTimeout(() => setCopied(false), 2500);
   };
 
@@ -62,7 +79,31 @@ export default function DemoWelcomeModal() {
       {/* Modal Dialog */}
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          <div
+            className="fixed inset-0 z-[60] overflow-y-auto overscroll-contain"
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') {
+                event.preventDefault();
+                handleDismiss();
+                return;
+              }
+              if (event.key !== 'Tab') return;
+
+              const focusable = Array.from(
+                event.currentTarget.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
+              );
+              const first = focusable[0];
+              const last = focusable[focusable.length - 1];
+              if (!first || !last) return;
+              if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+              } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+              }
+            }}
+          >
             {/* Backdrop Blur */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -73,15 +114,20 @@ export default function DemoWelcomeModal() {
               className="fixed inset-0 bg-black/65 backdrop-blur-sm"
             />
 
-            {/* Modal Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 25 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.92, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-lg bg-[#fdfaf1] rounded-3xl shadow-2xl border border-[#c5a059]/30 overflow-hidden z-10 my-8"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <div className="relative min-h-full flex items-center justify-center p-3 sm:p-6">
+              {/* Modal Card */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.92, y: 25 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.92, y: 20 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                className="relative w-full max-w-lg bg-[#fdfaf1] rounded-3xl shadow-2xl border border-[#c5a059]/30 overflow-hidden z-10 my-3 sm:my-6"
+                onClick={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="demo-welcome-title"
+                ref={dialogRef}
+              >
               {/* Royal Top Accent Bar */}
               <div className="h-2 bg-gradient-to-r from-[#0f1f3d] via-[#c5a059] to-[#0f1f3d]" />
 
@@ -94,7 +140,7 @@ export default function DemoWelcomeModal() {
                 <X size={18} />
               </button>
 
-              <div className="p-6 sm:p-8">
+              <div className="p-4 sm:p-8">
                 {/* Header Badge & Title */}
                 <div className="flex flex-col items-center text-center mb-6">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#c5a059] to-[#9a7b38] flex items-center justify-center text-white shadow-lg shadow-[#c5a059]/30 mb-3 border border-white/40">
@@ -104,10 +150,11 @@ export default function DemoWelcomeModal() {
                     Portfolio Project Showcase
                   </span>
                   <h2
+                    id="demo-welcome-title"
                     className="text-2xl sm:text-3xl font-bold text-[#0f1f3d] leading-tight"
                     style={{ fontFamily: 'Cinzel, serif' }}
                   >
-                    Welcome to JoshiWada Palace
+                    Welcome to JoshiWada
                   </h2>
                   <p className="text-sm text-gray-500 mt-1">
                     A Demo Project by <strong className="text-[#0f1f3d] font-semibold">Pratik Joshi</strong>
@@ -152,9 +199,9 @@ export default function DemoWelcomeModal() {
                       <p className="text-gray-600 text-xs sm:text-sm leading-relaxed mb-2">
                         Please explore this user-friendly website and share your valuable reviews with me:
                       </p>
-                      <div className="flex items-center justify-between gap-2 p-2 rounded-xl bg-gray-50 border border-gray-200">
-                        <span className="text-xs font-semibold text-[#0f1f3d] truncate">
-                          pratikjoshi0068@gmail.com
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-2 rounded-xl bg-gray-50 border border-gray-200">
+                        <span className="min-w-0 text-xs font-semibold text-[#0f1f3d] truncate">
+                          {CONTACT_EMAIL}
                         </span>
                         <div className="flex items-center gap-1.5 shrink-0">
                           <button
@@ -166,7 +213,7 @@ export default function DemoWelcomeModal() {
                             <span>{copied ? 'Copied' : 'Copy'}</span>
                           </button>
                           <a
-                            href="mailto:pratikjoshi0068@gmail.com?subject=Feedback%20for%20JoshiWada%20Hotel%20Project"
+                            href={`mailto:${CONTACT_EMAIL}?subject=Feedback%20for%20JoshiWada%20Project`}
                             className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#0f1f3d] text-white hover:bg-[#1a3260] transition-all flex items-center gap-1"
                           >
                             <ExternalLink size={12} />
@@ -201,7 +248,8 @@ export default function DemoWelcomeModal() {
                   <ArrowRight size={16} />
                 </button>
               </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         )}
       </AnimatePresence>

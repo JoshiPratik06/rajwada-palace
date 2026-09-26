@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Send, ArrowRight, Crown } from 'lucide-react';
+import { MapPin, Phone, Mail, Send, ArrowRight } from 'lucide-react';
 import { Instagram, Facebook, Twitter, Youtube } from './SocialIcons';
+import BrandMark from './BrandMark';
 import toast from 'react-hot-toast';
+import { ClearDemoDataButton, InstallAppButton } from './DemoDataControls';
 
 const QUICK_LINKS = [
   { label: 'Home', to: '/' },
@@ -31,19 +33,19 @@ const SERVICES = [
 const SOCIAL_LINKS = [
   {
     Icon: Instagram,
-    href: 'https://instagram.com/joshiwadapalacehotel',
+    href: 'https://instagram.com/joshiwadapalace',
     label: 'Instagram',
     color: 'hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-600',
   },
   {
     Icon: Facebook,
-    href: 'https://facebook.com/joshiwadapalacehotel',
+    href: 'https://facebook.com/joshiwadapalace',
     label: 'Facebook',
     color: 'hover:bg-blue-600',
   },
   {
     Icon: Twitter,
-    href: 'https://twitter.com/joshiwadahotel',
+    href: 'https://twitter.com/joshiwadapalace',
     label: 'Twitter / X',
     color: 'hover:bg-sky-500',
   },
@@ -69,9 +71,8 @@ const FooterLink = ({ to, children }) => (
 
 const Footer = () => {
   const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  const handleSubscribe = async (e) => {
+  const handleSubscribe = (e) => {
     e.preventDefault();
     if (!email.trim()) {
       toast.error('Please enter your email address.');
@@ -81,14 +82,7 @@ const Footer = () => {
       toast.error('Please enter a valid email address.');
       return;
     }
-    setLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setLoading(false);
-    toast.success('🎉 Subscribed! Welcome to the JoshiWada family.', {
-      duration: 4000,
-      style: { background: '#0f1f3d', color: '#fdfaf1', border: '1px solid #c5a059' },
-    });
-    setEmail('');
+    toast('Newsletter signup is a demo; no subscription was sent.', { icon: 'ℹ️' });
   };
 
   return (
@@ -105,7 +99,7 @@ const Footer = () => {
             {/* Logo */}
             <div className="mb-5">
               <div className="flex items-center gap-2 mb-1">
-                <Crown size={20} className="text-[#c5a059]" strokeWidth={1.5} />
+                <BrandMark className="w-9 h-9 text-[#c5a059] shrink-0" />
                 <span
                   className="text-2xl font-bold tracking-[0.3em] text-[#c5a059]"
                   style={{ fontFamily: "'Cinzel', 'Palatino Linotype', serif" }}
@@ -122,8 +116,8 @@ const Footer = () => {
             </div>
 
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Experience the timeless grandeur of JoshiWada Palace Hotel — where royal heritage
-              meets contemporary luxury in the heart of Shivajinagar, Pune.
+              Experience the timeless grandeur of JoshiWada — where royal heritage meets contemporary
+              luxury in Shivajinagar, Pune.
             </p>
 
             {/* Star rating */}
@@ -192,33 +186,33 @@ const Footer = () => {
             <ul className="space-y-4 mb-8">
               <li>
                 <a
-                  href="https://maps.google.com/?q=Shivajinagar+Pune"
+                  href="https://www.google.com/maps/dir/?api=1&destination=Shivajinagar%2C%20Pune"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 text-gray-400 hover:text-[#c5a059] transition-colors duration-200 group"
                 >
                   <MapPin size={16} className="text-[#c5a059] mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" strokeWidth={1.8} />
                   <span className="text-sm leading-snug">
-                    Shivajinagar, Pune<br />Maharashtra 411005
+                    Shivajinagar, Pune<br />Maharashtra, India
                   </span>
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+912025500000"
+                  href="tel:+918485214578"
                   className="flex items-center gap-3 text-gray-400 hover:text-[#c5a059] transition-colors duration-200 group"
                 >
                   <Phone size={16} className="text-[#c5a059] flex-shrink-0 group-hover:scale-110 transition-transform" strokeWidth={1.8} />
-                  <span className="text-sm">+91 20 2550 0000</span>
+                  <span className="text-sm">+91 8485214578</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:stay@joshiwada.com"
+                  href="mailto:joshiwadapalace@gmail.com"
                   className="flex items-center gap-3 text-gray-400 hover:text-[#c5a059] transition-colors duration-200 group"
                 >
                   <Mail size={16} className="text-[#c5a059] flex-shrink-0 group-hover:scale-110 transition-transform" strokeWidth={1.8} />
-                  <span className="text-sm">stay@joshiwada.com</span>
+                  <span className="text-sm">joshiwadapalace@gmail.com</span>
                 </a>
               </li>
             </ul>
@@ -229,7 +223,7 @@ const Footer = () => {
                 Newsletter
               </h4>
               <p className="text-gray-400 text-xs mb-4 leading-relaxed">
-                Subscribe for exclusive offers, royal packages, and heritage events.
+                Get a preview of exclusive offers and heritage events. Newsletter signup is demo-only.
               </p>
               <form onSubmit={handleSubscribe} className="flex flex-col gap-2" noValidate>
                 <input
@@ -244,20 +238,10 @@ const Footer = () => {
                   type="submit"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.97 }}
-                  disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 bg-[#c5a059] hover:bg-[#b08d45] text-[#0f1f3d] font-semibold text-sm tracking-wider uppercase py-2.5 px-4 rounded-lg transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center gap-2 bg-[#c5a059] hover:bg-[#b08d45] text-[#0f1f3d] font-semibold text-sm tracking-wider uppercase py-2.5 px-4 rounded-lg transition-colors duration-200"
                 >
-                  {loading ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-[#0f1f3d] border-t-transparent rounded-full animate-spin" />
-                      Subscribing…
-                    </>
-                  ) : (
-                    <>
-                      <Send size={14} />
-                      Subscribe
-                    </>
-                  )}
+                  <Send size={14} />
+                  Preview Signup
                 </motion.button>
               </form>
             </div>
@@ -273,9 +257,11 @@ const Footer = () => {
       <div className="container-custom py-5">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center">
           <p className="text-gray-500 text-xs">
-            &copy; {new Date().getFullYear()} JoshiWada Palace Hotel. All rights reserved.
+            &copy; {new Date().getFullYear()} JoshiWada. All rights reserved.
           </p>
-          <div className="flex items-center gap-5">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5">
+            <InstallAppButton />
+            <ClearDemoDataButton />
             <Link to="/privacy-policy" className="text-gray-500 hover:text-[#c5a059] text-xs transition-colors duration-200">
               Privacy Policy
             </Link>

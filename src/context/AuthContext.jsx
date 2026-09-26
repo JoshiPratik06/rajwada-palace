@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
 
     // Automatically log in newly signed up user
     setUser(newUser);
-    toast.success(`Welcome to JoshiWada Palace, ${newUser.name}!`, { icon: '👑' });
+    toast.success(`Welcome to JoshiWada, ${newUser.name}!`, { icon: '👑' });
     return { success: true, user: newUser };
   };
 

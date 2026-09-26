@@ -127,8 +127,10 @@ const FoodCard = ({ item }) => {
 
           {qty === 0 ? (
             <motion.button
+              type="button"
               whileTap={{ scale: 0.95 }}
               onClick={handleAdd}
+              aria-label={`Add ${item.name} to cart`}
               className="flex items-center gap-1.5 border border-[#c5a059] text-[#c5a059] text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-[#c5a059] hover:text-white transition-all duration-200 uppercase tracking-wide"
             >
               <ShoppingCart size={13} />
@@ -137,18 +139,22 @@ const FoodCard = ({ item }) => {
           ) : (
             <div className="flex items-center gap-2 bg-[#0f1f3d] rounded-full px-1 py-0.5">
               <motion.button
+                type="button"
                 whileTap={{ scale: 0.9 }}
                 onClick={handleDecrease}
+                aria-label={`Remove one ${item.name} from cart`}
                 className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
               >
                 <Minus size={12} />
               </motion.button>
-              <span className="text-white text-xs font-bold min-w-[16px] text-center">
+              <span className="text-white text-xs font-bold min-w-[16px] text-center" aria-live="polite" aria-label={`${qty} ${item.name} in cart`}>
                 {qty}
               </span>
               <motion.button
+                type="button"
                 whileTap={{ scale: 0.9 }}
                 onClick={handleIncrease}
+                aria-label={`Add one ${item.name} to cart`}
                 className="w-6 h-6 rounded-full bg-[#c5a059] hover:bg-[#b08a44] text-white flex items-center justify-center transition-colors"
               >
                 <Plus size={12} />

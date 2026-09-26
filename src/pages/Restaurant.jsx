@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, SlidersHorizontal, ShoppingCart, X, ChevronDown } from 'lucide-react';
+import { Search, SlidersHorizontal, ShoppingCart, X, ChevronDown, Phone } from 'lucide-react';
 import { foodData, foodCategories } from '../data/index.js';
 import { useCart } from '../context/CartContext';
 import { useDebounce, usePageTitle, useLockBodyScroll } from '../hooks/index.js';
@@ -35,6 +35,9 @@ const Restaurant = () => {
   const searchQuery = useDebounce(searchRaw, 300);
 
   const { itemCount, isCartOpen, setIsCartOpen } = useCart();
+  const signatureDishes = [108, 302, 206]
+    .map(id => foodData.find(item => item.id === id))
+    .filter(Boolean);
 
   /* ── Lock scroll when cart open on mobile ── */
   useLockBodyScroll(isCartOpen);
@@ -91,7 +94,7 @@ const Restaurant = () => {
   return (
     <div className="min-h-screen bg-[#fdfaf1]">
       {/* ── Hero ── */}
-      <section className="relative h-[400px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[400px] px-4 py-16 flex items-center justify-center overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80"
           alt="Restaurant"
@@ -104,22 +107,42 @@ const Restaurant = () => {
           transition={{ duration: 0.7 }}
           className="relative text-center px-4"
         >
-          <p className="text-[#c5a059] text-sm font-semibold tracking-[4px] uppercase mb-3">
-            JoshiWada Palace Hotel
+          <p className="text-[#e2c17f] text-xs sm:text-sm font-semibold tracking-[0.28em] uppercase mb-3">
+          JoshiWada · Shivajinagar, Pune
           </p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
             Royal Dining Experience
           </h1>
           <div className="h-0.5 w-20 bg-[#c5a059] mx-auto mb-4" />
           <p className="text-gray-200 max-w-xl mx-auto text-sm md:text-base">
-            Savour the finest authentic Indian cuisine, lovingly prepared by our award-winning chefs
-            using age-old royal recipes and the freshest seasonal ingredients.
+            Savour a considered selection of Indian cuisine, inspired by age-old recipes and prepared with fresh seasonal ingredients.
           </p>
+          <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
+            <a href="#signature-menu" className="btn-primary">Explore Signature Dishes</a>
+            <a href="tel:+918485214578" className="btn-secondary !border-white/70 !text-white hover:!border-[#c5a059]">
+              <Phone size={16} aria-hidden="true" /> Reserve a Table
+            </a>
+          </div>
         </motion.div>
       </section>
 
+      <section id="signature-menu" className="scroll-mt-28 bg-[#0f1f3d] px-4 py-14 sm:py-16">
+        <div className="container-custom">
+          <div className="mb-8 text-center">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.28em] text-[#d4b472]">From our kitchen</p>
+            <h2 className="font-[Cinzel,serif] text-3xl font-bold text-white sm:text-4xl">JoshiWada Signatures</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-white/70">
+              A small selection of menu favorites. Choose a dish to add it to your order. Orders are demo-only and stay in this browser.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {signatureDishes.map(item => <FoodCard key={item.id} item={item} />)}
+          </div>
+        </div>
+      </section>
+
       {/* ── Sticky Filters Bar ── */}
-      <div className="sticky top-[64px] z-30 bg-white border-b border-gray-200 shadow-sm">
+      <div className="sticky top-16 md:top-20 z-30 bg-white border-b border-gray-200 shadow-sm">
         {/* Category Pills Row */}
         <div className="overflow-x-auto scrollbar-hide">
           <div className="flex items-center gap-2 px-4 py-3 min-w-max">
@@ -128,6 +151,8 @@ const Restaurant = () => {
                 key={cat.id}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setActiveCategory(cat.id)}
+                aria-pressed={activeCategory === cat.id}
+                type="button"
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap border ${
                   activeCategory === cat.id
                     ? 'bg-[#0f1f3d] text-white border-[#0f1f3d]'
@@ -146,16 +171,21 @@ const Restaurant = () => {
           {/* Search */}
           <div className="relative flex-1 w-full sm:w-auto">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <label className="sr-only" htmlFor="restaurant-search">Search dishes</label>
             <input
+              id="restaurant-search"
               type="text"
               value={searchRaw}
               onChange={e => setSearchRaw(e.target.value)}
               placeholder="Search dishes…"
+              aria-label="Search dishes"
               className="w-full sm:w-64 pl-9 pr-8 py-2 text-sm border border-gray-200 rounded-full focus:outline-none focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] bg-gray-50"
             />
             {searchRaw && (
               <button
                 onClick={() => setSearchRaw('')}
+                type="button"
+                aria-label="Clear dish search"
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
                 <X size={13} />
@@ -169,6 +199,8 @@ const Restaurant = () => {
               <button
                 key={f.id}
                 onClick={() => setVegFilter(f.id)}
+                aria-pressed={vegFilter === f.id}
+                type="button"
                 className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
                   vegFilter === f.id
                     ? f.id === 'veg'
@@ -189,6 +221,9 @@ const Restaurant = () => {
           <div className="relative">
             <button
               onClick={() => setShowSortDropdown(v => !v)}
+              aria-expanded={showSortDropdown}
+              aria-haspopup="listbox"
+              aria-label={`Sort dishes. Current: ${activeSortLabel}`}
               className="flex items-center gap-1.5 border border-gray-200 rounded-full px-4 py-2 text-sm text-gray-600 hover:border-[#c5a059] transition-colors bg-white"
             >
               <SlidersHorizontal size={14} />
@@ -225,6 +260,7 @@ const Restaurant = () => {
           {/* Cart Button */}
           <button
             onClick={() => setIsCartOpen(true)}
+            type="button"
             className="flex items-center gap-2 bg-[#c5a059] hover:bg-[#b08a44] text-white rounded-full px-4 py-2 text-sm font-semibold transition-all cursor-pointer shrink-0 ml-auto shadow-sm"
             aria-label={`Open Cart (${itemCount} items)`}
           >
@@ -273,7 +309,7 @@ const Restaurant = () => {
             <div className="text-6xl">🍽️</div>
             <h3 className="text-xl font-bold text-[#0f1f3d]">No dishes found</h3>
             <p className="text-gray-400 max-w-xs">
-              Try adjusting your filters or search term.
+              We couldn&apos;t find dishes for this search and filter combination. Try a different search or clear the filters.
             </p>
             <button
               onClick={() => { setActiveCategory('all'); setVegFilter('all'); setSearchRaw(''); }}

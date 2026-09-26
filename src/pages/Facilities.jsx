@@ -214,7 +214,7 @@ export default function Facilities() {
               <p className="text-[#c5a059] font-medium tracking-widest uppercase text-sm mb-3">Ready to Experience?</p>
               <h2 className="text-4xl font-bold text-white font-[Cinzel,serif] mb-4">Plan Your Visit</h2>
               <p className="text-gray-400 mb-8 max-w-lg mx-auto">
-                Immerse yourself in a world where every facility is a masterpiece and every service a memory. Book your stay at JoshiWada Palace today.
+                Immerse yourself in a world where every facility is a masterpiece and every service a memory. Book your stay at JoshiWada today.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link to="/booking" className="btn-primary inline-flex items-center gap-2">

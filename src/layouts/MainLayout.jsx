@@ -6,6 +6,8 @@ import ScrollToTop from '../components/ScrollToTop';
 import WhatsAppCTA from '../components/WhatsAppCTA';
 import DemoWelcomeModal from '../components/DemoWelcomeModal';
 
+const ENABLE_WHATSAPP_CHAT = false;
+
 export default function MainLayout() {
   const location = useLocation();
 
@@ -15,15 +17,15 @@ export default function MainLayout() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <DemoWelcomeModal />
       <Navbar />
-      <main className="flex-1">
+      <main id="main-content" tabIndex="-1" className="flex-1">
         <Outlet />
       </main>
       <Footer />
       <ScrollToTop />
-      <WhatsAppCTA />
+      {ENABLE_WHATSAPP_CHAT && <WhatsAppCTA />}
     </div>
   );
 }
-

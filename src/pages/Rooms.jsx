@@ -1,14 +1,17 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Search, SlidersHorizontal, Star, Users, Maximize2, BedDouble,
-  ChevronRight, Heart, X, Filter, ArrowUpDown, CheckCircle2, XCircle
+  Search, Star, Users, Maximize2, BedDouble,
+  ChevronRight, Heart, X, Filter, CheckCircle2, XCircle
 } from 'lucide-react';
 import { roomsData } from '../data/index.js';
 import { useBooking } from '../context/BookingContext';
 import { formatPrice, stars } from '../utils/index.js';
 import { usePageTitle, useDebounce } from '../hooks/index.js';
+import { calcNights } from '../utils/index.js';
+import { useLanguage } from '../context/LanguageContext';
+import toast from 'react-hot-toast';
 
 const CATEGORIES = [
   { id: 'all', label: 'All Rooms' },
@@ -43,7 +46,7 @@ function StarRating({ rating }) {
   );
 }
 
-function RoomCard({ room, index }) {
+function RoomCard({ room, index, compared, compareLimitReached, onToggleCompare, compareLabel }) {
   const navigate = useNavigate();
   const { toggleWishlist, isWishlisted } = useBooking();
   const wishlisted = isWishlisted(room.id);
@@ -59,6 +62,7 @@ function RoomCard({ room, index }) {
         <img
           src={room.images[0]}
           alt={room.name}
+          loading="lazy"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
@@ -74,6 +78,8 @@ function RoomCard({ room, index }) {
         {/* Wishlist */}
         <button
           onClick={(e) => { e.stopPropagation(); toggleWishlist(room.id); }}
+          aria-label={wishlisted ? `Remove ${room.name} from saved rooms` : `Save ${room.name}`}
+          aria-pressed={wishlisted}
           className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all ${wishlisted ? 'bg-red-500 text-white' : 'bg-white/80 text-gray-600 hover:bg-red-500 hover:text-white'}`}
         >
           <Heart size={14} className={wishlisted ? 'fill-white' : ''} />
@@ -125,23 +131,51 @@ function RoomCard({ room, index }) {
             Book Now
           </button>
         </div>
+        <button
+          type="button"
+          onClick={() => onToggleCompare(room.id)}
+          disabled={!compared && compareLimitReached}
+          aria-pressed={compared}
+          className={`mt-2 w-full rounded-xl border px-3 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${compared ? 'border-[#c5a059] bg-[#fdfaf1] text-[#0f1f3d]' : 'border-gray-200 text-gray-600 hover:border-[#c5a059] hover:text-[#0f1f3d]'}`}
+        >
+          {compared ? `✓ ${compareLabel}` : compareLabel}
+        </button>
       </div>
     </motion.div>
   );
 }
 
 export default function Rooms() {
-  usePageTitle('Rooms & Suites');
+  const { t } = useLanguage();
+  usePageTitle(t('rooms.title'));
   const { search } = useBooking();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('default');
   const [availableOnly, setAvailableOnly] = useState(false);
+  const [minimumGuests, setMinimumGuests] = useState(1);
   const [priceRange, setPriceRange] = useState([0, 30000]);
   const [showFilters, setShowFilters] = useState(false);
+  const [comparedRoomIds, setComparedRoomIds] = useState(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('joshiwada_room_comparison') || '[]');
+      return Array.isArray(stored) ? stored.filter(Number.isInteger).slice(0, 3) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const debouncedSearch = useDebounce(searchQuery, 300);
+  const compareNights = calcNights(search.checkIn, search.checkOut) || 1;
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('joshiwada_room_comparison', JSON.stringify(comparedRoomIds));
+    } catch (error) {
+      console.error('Unable to save room comparison selection', error);
+    }
+  }, [comparedRoomIds]);
 
   const maxPrice = Math.max(...roomsData.map(r => r.price));
   const minPrice = Math.min(...roomsData.map(r => r.price));
@@ -166,6 +200,7 @@ export default function Rooms() {
       rooms = rooms.filter(r => r.available);
     }
 
+    rooms = rooms.filter(r => r.maxGuests >= minimumGuests);
     rooms = rooms.filter(r => r.price >= priceRange[0] && r.price <= priceRange[1]);
 
     switch (sortBy) {
@@ -177,17 +212,31 @@ export default function Rooms() {
     }
 
     return rooms;
-  }, [debouncedSearch, selectedCategory, sortBy, availableOnly, priceRange]);
+  }, [debouncedSearch, selectedCategory, sortBy, availableOnly, minimumGuests, priceRange]);
+
+  const comparedRooms = roomsData.filter(room => comparedRoomIds.includes(room.id));
+
+  const toggleCompare = (roomId) => {
+    setComparedRoomIds((current) => {
+      if (current.includes(roomId)) return current.filter(id => id !== roomId);
+      if (current.length >= 3) {
+        toast.error('Compare up to 3 rooms at a time.');
+        return current;
+      }
+      return [...current, roomId];
+    });
+  };
 
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedCategory('all');
     setSortBy('default');
     setAvailableOnly(false);
+    setMinimumGuests(1);
     setPriceRange([0, 30000]);
   };
 
-  const hasActiveFilters = searchQuery || selectedCategory !== 'all' || sortBy !== 'default' || availableOnly || priceRange[0] > 0 || priceRange[1] < 30000;
+  const hasActiveFilters = searchQuery || selectedCategory !== 'all' || sortBy !== 'default' || availableOnly || minimumGuests > 1 || priceRange[0] > 0 || priceRange[1] < 30000;
 
   return (
     <div className="min-h-screen bg-[#fdfaf1]">
@@ -201,8 +250,8 @@ export default function Rooms() {
           transition={{ duration: 0.6 }}
           className="relative text-center"
         >
-          <p className="text-[#c5a059] text-sm tracking-[4px] uppercase mb-3">JoshiWada Palace Hotel</p>
-          <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">Our Rooms & Suites</h1>
+          <p className="text-[#c5a059] text-sm tracking-[4px] uppercase mb-3">JoshiWada</p>
+          <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">{t('rooms.title')}</h1>
           <div className="gold-line mx-auto" />
         </motion.div>
       </div>
@@ -225,7 +274,8 @@ export default function Rooms() {
             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search rooms by name or type..."
+              aria-label={t('rooms.search')}
+              placeholder={t('rooms.search')}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="input-field input-icon-left w-full"
@@ -238,6 +288,7 @@ export default function Rooms() {
           </div>
           <div className="flex gap-2">
             <select
+              aria-label="Sort rooms"
               value={sortBy}
               onChange={e => setSortBy(e.target.value)}
               className="input-field pr-8 cursor-pointer"
@@ -249,7 +300,7 @@ export default function Rooms() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 font-medium transition-all ${showFilters ? 'bg-[#0f1f3d] text-white border-[#0f1f3d]' : 'border-gray-300 text-gray-600 hover:border-[#0f1f3d]'}`}
             >
               <Filter size={16} />
-              <span className="hidden sm:inline">Filters</span>
+              <span className="hidden sm:inline">{t('rooms.filters')}</span>
               {hasActiveFilters && <span className="w-2 h-2 bg-[#c5a059] rounded-full" />}
             </button>
           </div>
@@ -265,7 +316,7 @@ export default function Rooms() {
               className="overflow-hidden"
             >
               <div className="bg-white rounded-2xl p-6 mb-6 card-shadow">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                   {/* Category */}
                   <div>
                     <h4 className="font-semibold text-[#0f1f3d] mb-3">Room Category</h4>
@@ -306,14 +357,25 @@ export default function Rooms() {
 
                   {/* Other Filters */}
                   <div>
+                    <label htmlFor="minimum-guests" className="font-semibold text-[#0f1f3d] mb-3 block">{t('rooms.capacity')}</label>
+                    <select
+                      id="minimum-guests"
+                      value={minimumGuests}
+                      onChange={event => setMinimumGuests(Number(event.target.value))}
+                      className="input-field w-full"
+                    >
+                      {[1, 2, 3, 4, 5, 6].map(count => <option key={count} value={count}>{count}+ guests</option>)}
+                    </select>
+                  </div>
+                  <div>
                     <h4 className="font-semibold text-[#0f1f3d] mb-3">Availability</h4>
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                      <div
-                        onClick={() => setAvailableOnly(!availableOnly)}
-                        className={`w-12 h-6 rounded-full relative transition-all ${availableOnly ? 'bg-[#c5a059]' : 'bg-gray-300'}`}
-                      >
-                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${availableOnly ? 'left-7' : 'left-1'}`} />
-                      </div>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={availableOnly}
+                        onChange={event => setAvailableOnly(event.target.checked)}
+                        className="h-4 w-4 accent-[#c5a059]"
+                      />
                       <span className="text-sm text-gray-600">Available rooms only</span>
                     </label>
                   </div>
@@ -347,7 +409,7 @@ export default function Rooms() {
         {/* Results Count */}
         <div className="flex items-center justify-between mb-6">
           <p className="text-gray-600">
-            Showing <span className="font-semibold text-[#0f1f3d]">{filteredRooms.length}</span> of {roomsData.length} rooms
+            {t('rooms.results')} <span className="font-semibold text-[#0f1f3d]">{filteredRooms.length}</span> of {roomsData.length}
             {hasActiveFilters && <button onClick={clearFilters} className="ml-3 text-[#c5a059] text-sm hover:underline">Clear filters</button>}
           </p>
           {availableOnly && (
@@ -356,6 +418,70 @@ export default function Rooms() {
             </span>
           )}
         </div>
+
+        <p className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-900">
+          {t('rooms.demo')}
+        </p>
+
+        {comparedRooms.length > 0 && (
+          <section aria-labelledby="room-comparison-title" className="mb-8 overflow-hidden rounded-2xl border border-[#c5a059]/40 bg-white card-shadow">
+            <div className="flex flex-col gap-2 border-b border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+              <div>
+                <h2 id="room-comparison-title" className="text-lg font-bold text-[#0f1f3d]">{t('rooms.compare')} ({comparedRooms.length}/3)</h2>
+                <p className="text-xs text-gray-500">{t('rooms.compareHelp')}</p>
+              </div>
+              <button type="button" onClick={() => setComparedRoomIds([])} className="self-start rounded-lg px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 sm:self-auto">
+                Clear comparison
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[640px] text-left text-sm">
+                <caption className="sr-only">Side-by-side comparison of selected rooms. Prices are estimates using demo data.</caption>
+                <thead className="bg-[#fdfaf1]">
+                  <tr>
+                    <th scope="col" className="w-36 p-3 text-xs uppercase tracking-wide text-gray-500">Room detail</th>
+                    {comparedRooms.map(room => (
+                      <th scope="col" key={room.id} className="p-3 font-semibold text-[#0f1f3d]">
+                        <div className="flex items-start justify-between gap-2">
+                          <span>{room.name}</span>
+                          <button type="button" onClick={() => toggleCompare(room.id)} aria-label={`Remove ${room.name} from comparison`} className="rounded p-1 text-gray-500 hover:bg-white hover:text-red-600">
+                            <X size={15} />
+                          </button>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {[
+                    ['Price / night', room => formatPrice(room.price)],
+                    ['Maximum guests', room => `${room.maxGuests} guests`],
+                    ['Bed', room => room.bedType],
+                    ['Room size', room => room.size],
+                    ['Guest rating', room => `${room.rating} / 5 (${room.reviews} reviews)`],
+                    [`Estimated ${compareNights}-night total`, room => formatPrice(Math.round(room.price * compareNights * 1.12))],
+                  ].map(([label, value]) => (
+                    <tr key={label}>
+                      <th scope="row" className="p-3 font-medium text-gray-600">{label}</th>
+                      {comparedRooms.map(room => <td key={room.id} className="p-3 text-gray-800">{value(room)}</td>)}
+                    </tr>
+                  ))}
+                  <tr>
+                    <th scope="row" className="p-3 font-medium text-gray-600">Details</th>
+                    {comparedRooms.map(room => (
+                      <td key={room.id} className="p-3">
+                        <Link to={`/rooms/${room.slug}`} className="font-semibold text-[#9a7536] underline underline-offset-2">View room</Link>
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="px-4 pb-4 text-xs text-gray-500">
+              Estimate includes the displayed 12% tax and uses {search.checkIn && search.checkOut ? `${compareNights} selected night${compareNights === 1 ? '' : 's'}` : 'one night by default'}. Availability and final prices are not confirmed.
+            </p>
+          </section>
+        )}
 
         {/* Rooms Grid */}
         <AnimatePresence mode="wait">
@@ -368,7 +494,15 @@ export default function Rooms() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {filteredRooms.map((room, index) => (
-                <RoomCard key={room.id} room={room} index={index} />
+                <RoomCard
+                  key={room.id}
+                  room={room}
+                  index={index}
+                  compared={comparedRoomIds.includes(room.id)}
+                  compareLimitReached={comparedRoomIds.length >= 3}
+                  onToggleCompare={toggleCompare}
+                  compareLabel={t('rooms.compare')}
+                />
               ))}
             </motion.div>
           ) : (
@@ -380,9 +514,9 @@ export default function Rooms() {
               className="text-center py-20"
             >
               <div className="text-6xl mb-4">🏨</div>
-              <h3 className="text-2xl font-bold text-[#0f1f3d] mb-2">No rooms found</h3>
-              <p className="text-gray-500 mb-6">Try adjusting your filters or search terms</p>
-              <button onClick={clearFilters} className="btn-primary">Clear All Filters</button>
+              <h3 className="text-2xl font-bold text-[#0f1f3d] mb-2">{t('rooms.noResults')}</h3>
+              <p className="text-gray-500 mb-6">{t('rooms.tryAgain')}</p>
+              <button onClick={clearFilters} className="btn-primary">{t('rooms.clear')}</button>
             </motion.div>
           )}
         </AnimatePresence>

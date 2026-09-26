@@ -1,16 +1,43 @@
-# React + Vite
+# JoshiWada Hotel & Dining Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A responsive React/Vite front-end demo for JoshiWada in Shivajinagar, Pune.
+There is no backend: bookings, saved rooms, cart contents, food orders, and
+demo accounts are stored locally in the current browser only.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm install
+npm run dev
+```
 
-## React Compiler
+Other available scripts:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```sh
+npm run build
+npm run preview
+npm run lint
+```
 
-## Expanding the Oxlint configuration
+## Demo features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- Browse, filter, and compare rooms. Prices and availability are sample data.
+- Save demo bookings, wishlist selections, and cart/orders in browser storage.
+- Use the footer’s **Clear local demo data** control to erase those saved items.
+- Choose English, Hindi, or Marathi from the navigation language selector.
+- Install the site where supported, or open it offline after the first online load.
+  The offline experience uses a cached app shell; remote photos and fonts may not
+  be available without an internet connection.
+- Use map directions, phone, and email links for the Shivajinagar location.
+
+## Important limitations
+
+This project does not send reservations, process payments, submit contact or
+newsletter forms to a server, or share locally saved data between devices.
+Contact actions open the visitor’s email app. Do not enter real passwords,
+payment details, or sensitive personal information into this demo.
+
+The installable app and service worker require HTTPS in deployment (localhost is
+also supported for development). Route metadata is updated by the client-side
+app; social preview crawlers that do not run JavaScript may only see the default
+metadata in `index.html`.

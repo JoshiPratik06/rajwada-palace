@@ -132,7 +132,7 @@ export default function NotFound() {
           transition={{ duration: 0.6, delay: 1.1 }}
           className="mt-12 text-[#c5a059]/50 text-xs tracking-[0.4em] uppercase font-[Cinzel,serif]"
         >
-          JoshiWada Palace Hotel · Shivajinagar, Pune
+          JoshiWada · Pune
         </motion.p>
       </div>
     </div>

@@ -17,6 +17,8 @@ import {
   X,
   Tag,
   ChevronRight,
+  Landmark,
+  MapPinned,
 } from 'lucide-react';
 
 import { useBooking } from '../context/BookingContext';
@@ -32,6 +34,8 @@ import {
 import RoomCard from '../components/RoomCard';
 import ReviewCard from '../components/ReviewCard';
 import SectionHeader from '../components/SectionHeader';
+import { useLanguage } from '../context/LanguageContext';
+import { usePageTitle } from '../hooks/index.js';
 
 // ─── Featured rooms: deluxe, luxury, suite, presidential ─────────────────────
 const FEATURED_SLUGS = ['deluxe-room', 'luxury-room', 'suite', 'presidential-suite'];
@@ -65,6 +69,8 @@ const STATS = [
 const Home = () => {
   const navigate = useNavigate();
   const { setSearch, search } = useBooking();
+  const { t } = useLanguage();
+  usePageTitle('Hotel in Shivajinagar, Pune', 'Explore JoshiWada in Shivajinagar, Pune: browse room options, local highlights, dining, and hotel facilities. This front-end demo does not process real bookings or payments.');
 
   // Quick booking bar state
   const [checkIn, setCheckIn] = useState(search.checkIn ? new Date(search.checkIn) : null);
@@ -77,7 +83,6 @@ const Home = () => {
 
   // Newsletter
   const [email, setEmail] = useState('');
-  const [subscribing, setSubscribing] = useState(false);
 
   // Trap body scroll when lightbox open
   useEffect(() => {
@@ -96,14 +101,10 @@ const Home = () => {
     navigate('/rooms');
   };
 
-  const handleSubscribe = async (e) => {
+  const handleSubscribe = (e) => {
     e.preventDefault();
     if (!email.trim()) return toast.error('Please enter a valid email.');
-    setSubscribing(true);
-    await new Promise((r) => setTimeout(r, 900));
-    setSubscribing(false);
-    setEmail('');
-    toast.success('🎉 Subscribed! Welcome to JoshiWada updates.');
+    toast('Newsletter signup is a demo; no subscription was sent.', { icon: 'ℹ️' });
   };
 
   const today = new Date();
@@ -117,32 +118,35 @@ const Home = () => {
       {/* ===================================================================
           SECTION 1 — HERO
       =================================================================== */}
-      <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+      <section className="relative h-[100svh] min-h-[620px] w-full flex flex-col items-center justify-center overflow-hidden">
         {/* Background */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&q=85')" }}
+          role="img"
+          aria-label="Elegant heritage hotel at dusk"
         />
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#07101f]/65 via-[#07101f]/40 to-[#07101f]/75" />
+        <div className="absolute inset-5 sm:inset-8 border border-white/15 pointer-events-none" aria-hidden="true" />
 
         {/* Content */}
         <motion.div
-          className="relative z-10 text-center px-4 flex flex-col items-center gap-6"
+          className="relative z-10 text-center px-5 pt-16 flex flex-col items-center gap-5 sm:gap-6 max-w-6xl"
           initial="hidden"
           animate="show"
           variants={stagger}
         >
           {/* Decorative line */}
           <motion.div variants={fadeUp} className="flex items-center gap-4">
-            <div className="h-px w-16 bg-[#c5a059]" />
-            <span className="text-[#c5a059] text-xs tracking-[0.35em] uppercase font-medium">Est. 2009 · Shivajinagar, Pune</span>
-            <div className="h-px w-16 bg-[#c5a059]" />
+            <div className="h-px w-8 sm:w-16 bg-[#c5a059]" />
+            <span className="text-[#e2c17f] text-[10px] sm:text-xs tracking-[0.28em] uppercase font-medium">{t('home.eyebrow')}</span>
+            <div className="h-px w-8 sm:w-16 bg-[#c5a059]" />
           </motion.div>
 
           {/* Hotel name */}
           <motion.h1
             variants={fadeUp}
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-white tracking-widest leading-none"
+            className="text-[clamp(2.7rem,9vw,8rem)] font-bold text-white tracking-[0.12em] leading-tight"
             style={{ fontFamily: 'Cinzel, serif', textShadow: '0 4px 30px rgba(0,0,0,0.4)' }}
           >
             JOSHIWADA
@@ -153,31 +157,40 @@ const Home = () => {
             variants={fadeUp}
             className="text-[#c5a059] text-sm sm:text-base md:text-lg tracking-[0.2em] uppercase font-light"
           >
-            A Legacy of Royal Hospitality &nbsp;·&nbsp; Shivajinagar, Pune
+            A quieter kind of grandeur
           </motion.p>
 
           {/* Buttons */}
           <motion.div
             variants={fadeUp}
-            className="flex flex-col sm:flex-row items-center gap-4 mt-2"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mt-3"
           >
-            <Link to="/booking" className="btn-primary px-8 py-3 text-base">
-              Book Your Stay
+            <Link to="/booking" className="btn-primary px-8 py-3.5 text-base">
+              {t('home.book')}
             </Link>
-            <Link to="/rooms" className="btn-secondary px-8 py-3 text-base">
-              Explore Rooms
+            <Link to="/rooms" className="btn-secondary px-8 py-3.5 text-base !border-white/70 !text-white hover:!border-[#c5a059]">
+              {t('home.explore')}
             </Link>
           </motion.div>
         </motion.div>
 
         {/* Scroll indicator */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 cursor-pointer z-10"
+          className="absolute bottom-5 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 cursor-pointer z-10"
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
           onClick={() => window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })}
+          role="button"
+          tabIndex={0}
+          aria-label="Scroll to explore the hotel"
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+            }
+          }}
         >
-          <span className="text-white/60 text-xs tracking-widest uppercase">Scroll</span>
+          <span className="text-white/60 text-xs tracking-widest uppercase">{t('home.scroll')}</span>
           <ChevronDown className="w-6 h-6 text-[#c5a059]" />
         </motion.div>
       </section>
@@ -320,7 +333,7 @@ const Home = () => {
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className="h-px w-10 bg-[#c5a059]" />
-                <span className="text-[#c5a059] text-xs tracking-[0.3em] uppercase">About JoshiWada Palace</span>
+                <span className="text-[#c5a059] text-xs tracking-[0.3em] uppercase">About JoshiWada</span>
               </div>
 
               <h2
@@ -333,7 +346,7 @@ const Home = () => {
               <div className="h-px w-20 bg-[#c5a059] mb-6" />
 
               <p className="text-white/70 text-base leading-relaxed mb-4">
-                Nestled in the heart of Shivajinagar, Pune, JoshiWada Palace Hotel is a tribute to royal heritage and timeless luxury. Our hotel blends architectural grandeur with the finest contemporary comforts.
+                Located in Shivajinagar, Pune, JoshiWada blends the grandeur of Maratha-inspired architecture with the finest contemporary comforts.
               </p>
               <p className="text-white/70 text-base leading-relaxed">
                 From the moment you step through our doors, you are welcomed into a world of personalized service, exquisite dining, and unmatched elegance. Every detail has been curated to ensure your stay is nothing short of extraordinary.
@@ -379,17 +392,53 @@ const Home = () => {
       </section>
 
       {/* ===================================================================
+          SIGNATURE — PUNE NEIGHBORHOOD GUIDE
+      =================================================================== */}
+      <section className="section-padding bg-white">
+        <div className="container-custom">
+          <SectionHeader
+            title="Discover Pune, At Your Pace"
+            subtitle="Make JoshiWada your starting point for the city's culture, heritage, and everyday rhythms."
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { name: 'Shaniwar Wada', detail: 'A landmark of Maratha history and architecture.', query: 'Shaniwar Wada Pune', icon: Landmark },
+              { name: 'Pataleshwar Cave Temple', detail: 'A serene rock-cut temple in the heart of the city.', query: 'Pataleshwar Cave Temple Pune', icon: Landmark },
+              { name: 'Raja Dinkar Kelkar Museum', detail: 'A remarkable collection celebrating Indian art and craft.', query: 'Raja Dinkar Kelkar Museum Pune', icon: Landmark },
+              { name: 'Fergusson College Road', detail: 'A lively local stretch for cafés, shops, and a stroll.', query: 'Fergusson College Road Pune', icon: MapPinned },
+            ].map(({ name, detail, query, icon: Icon }) => (
+              <a
+                key={name}
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-2xl border border-[#e8dfcf] bg-[#fdfaf1] p-5 transition-all hover:-translate-y-1 hover:border-[#c5a059] hover:shadow-lg focus-visible:outline-offset-4"
+              >
+                <Icon className="mb-4 text-[#b08a44]" size={23} aria-hidden="true" />
+                <h3 className="font-[Cinzel,serif] text-lg font-bold text-[#0f1f3d] group-hover:text-[#9a7635]">{name}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">{detail}</p>
+                <span className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#0f1f3d]">
+                  Open map <ChevronRight size={14} aria-hidden="true" />
+                </span>
+              </a>
+            ))}
+          </div>
+          <p className="mt-5 text-center text-xs text-gray-500">Routes and journey times vary; open the map for current directions.</p>
+        </div>
+      </section>
+
+      {/* ===================================================================
           SECTION 5 — RESTAURANT PREVIEW
       =================================================================== */}
       <section className="overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[520px]">
+        <div className="grid w-full min-w-0 grid-cols-1 lg:grid-cols-2 min-h-[520px]">
           {/* Image side */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative min-h-[320px] lg:min-h-0"
+            className="relative min-h-[320px] w-full min-w-0 lg:min-h-0"
           >
             <div
               className="absolute inset-0 bg-cover bg-center"
@@ -400,11 +449,11 @@ const Home = () => {
 
           {/* Text side */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="bg-[#fdfaf1] flex flex-col justify-center px-8 md:px-14 py-14"
+            className="w-full min-w-0 bg-[#fdfaf1] flex flex-col justify-center px-5 sm:px-8 md:px-14 py-14"
           >
             <div className="flex items-center gap-3 mb-5">
               <div className="h-px w-10 bg-[#c5a059]" />
@@ -412,7 +461,7 @@ const Home = () => {
             </div>
 
             <h2
-              className="text-3xl md:text-4xl font-bold text-[#0f1f3d] mb-4 leading-tight"
+              className="break-words text-3xl md:text-4xl font-bold text-[#0f1f3d] mb-4 leading-tight"
               style={{ fontFamily: 'Cinzel, serif' }}
             >
               Authentic Indian Cuisine
@@ -421,10 +470,10 @@ const Home = () => {
             <div className="h-px w-16 bg-[#c5a059] mb-6" />
 
             <p className="text-gray-600 leading-relaxed mb-4">
-              Our award-winning restaurant takes you on a culinary journey across India. From the rich gravies of the North to the subtle flavors of the South, every dish is a celebration of authentic recipes, fresh ingredients, and expert craftsmanship.
+              Our restaurant takes you on a culinary journey across India. From the rich gravies of the North to the subtle flavors of the South, every dish celebrates regional recipes, fresh ingredients, and thoughtful preparation.
             </p>
             <p className="text-gray-600 leading-relaxed mb-8">
-              Experience the magic of a royal spread — tandoori delicacies, slow-cooked biryanis, and indulgent desserts, all served in an ambiance that reflects the splendor of royal heritage.
+              Experience the magic of a royal spread — tandoori delicacies, slow-cooked biryanis, and indulgent desserts, all served in an ambiance inspired by Pune's rich heritage.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -493,7 +542,7 @@ const Home = () => {
         <div className="container-custom">
           <SectionHeader
             title="Guest Experiences"
-            subtitle="Hear from our cherished guests about their unforgettable stays at JoshiWada Palace Hotel."
+            subtitle="Hear from our cherished guests about their unforgettable stays at JoshiWada."
           />
 
           <motion.div
@@ -616,7 +665,7 @@ const Home = () => {
         <div className="container-custom">
           <SectionHeader
             title="Our Gallery"
-            subtitle="A visual journey through the splendor and grandeur of JoshiWada Palace Hotel."
+            subtitle="A visual journey through the splendor and grandeur of JoshiWada."
           />
 
           {/* Masonry-style grid */}
@@ -688,7 +737,7 @@ const Home = () => {
                 </h2>
                 <div className="h-px w-16 bg-[#c5a059] mb-4" />
                 <p className="text-gray-500 mb-6 text-sm leading-relaxed">
-                  Subscribe to receive exclusive offers, seasonal packages, and updates from JoshiWada Palace Hotel directly in your inbox.
+                  Preview exclusive offers and seasonal packages. Newsletter signup is demo-only.
                 </p>
 
                 <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3">
@@ -702,10 +751,9 @@ const Home = () => {
                   />
                   <button
                     type="submit"
-                    disabled={subscribing}
-                    className="btn-primary px-6 py-3 text-sm whitespace-nowrap disabled:opacity-70"
+                    className="btn-primary px-6 py-3 text-sm whitespace-nowrap"
                   >
-                    {subscribing ? 'Subscribing...' : 'Subscribe'}
+                    Preview Signup
                   </button>
                 </form>
               </motion.div>
@@ -728,7 +776,15 @@ const Home = () => {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-[#0f1f3d]">Address</p>
-                    <p className="text-gray-500 text-sm">Shivajinagar, Pune, Maharashtra 411005, India</p>
+                    <p className="text-gray-500 text-sm">Shivajinagar, Pune, Maharashtra, India</p>
+                    <a
+                      href="https://www.google.com/maps/dir/?api=1&destination=Shivajinagar%2C%20Pune"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex text-sm font-semibold text-[#9a7536] underline underline-offset-2 hover:text-[#0f1f3d]"
+                    >
+                      Get directions
+                    </a>
                   </div>
                 </div>
 
@@ -738,12 +794,8 @@ const Home = () => {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-[#0f1f3d]">Phone</p>
-                    <a href="tel:+912025501234" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
-                      +91 20 2550 1234
-                    </a>
-                    <br />
-                    <a href="tel:+912025505678" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
-                      +91 20 2550 5678
+                    <a href="tel:+918485214578" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
+                      +91 8485214578
                     </a>
                   </div>
                 </div>
@@ -754,12 +806,8 @@ const Home = () => {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-[#0f1f3d]">Email</p>
-                    <a href="mailto:reservations@joshiwada.com" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
-                      reservations@joshiwada.com
-                    </a>
-                    <br />
-                    <a href="mailto:info@joshiwada.com" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
-                      info@joshiwada.com
+                    <a href="mailto:joshiwadapalace@gmail.com" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
+                      joshiwadapalace@gmail.com
                     </a>
                   </div>
                 </div>
@@ -775,14 +823,14 @@ const Home = () => {
               className="rounded-2xl overflow-hidden card-shadow min-h-[380px]"
             >
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.986877993437!2d73.8447!3d18.5314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c0792d4b9b9d%3A0xa621532168d1f2b6!2sShivajinagar%2C%20Pune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1234567890"
+                src="https://maps.google.com/maps?q=Shivajinagar%2C%20Pune&t=&z=13&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0, minHeight: '380px' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="JoshiWada Palace Hotel Location"
+                title="JoshiWada location in Shivajinagar, Pune"
               />
             </motion.div>
           </div>

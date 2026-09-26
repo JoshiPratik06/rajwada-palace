@@ -4,16 +4,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Calendar, User, LogOut, ChevronDown } from 'lucide-react';
 import { useScrolled } from '../hooks/index.js';
 import { useAuth } from '../context/AuthContext';
+import BrandMark from './BrandMark';
+import { useLanguage } from '../context/LanguageContext';
 
 const NAV_LINKS = [
-  { label: 'Home', to: '/' },
-  { label: 'Rooms', to: '/rooms' },
-  { label: 'Restaurant', to: '/restaurant' },
-  { label: 'About', to: '/about' },
-  { label: 'Facilities', to: '/facilities' },
-  { label: 'Gallery', to: '/gallery' },
-  { label: 'Offers', to: '/offers' },
-  { label: 'Contact', to: '/contact' },
+  { key: 'nav.home', to: '/' },
+  { key: 'nav.rooms', to: '/rooms' },
+  { key: 'nav.restaurant', to: '/restaurant' },
+  { key: 'nav.about', to: '/about' },
+  { key: 'nav.facilities', to: '/facilities' },
+  { key: 'nav.gallery', to: '/gallery' },
+  { key: 'nav.offers', to: '/offers' },
+  { key: 'nav.contact', to: '/contact' },
 ];
 
 const Navbar = () => {
@@ -21,6 +23,7 @@ const Navbar = () => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const scrolled = useScrolled(80);
   const { user, isAuthenticated, logout } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -75,26 +78,24 @@ const Navbar = () => {
         <div className="container-custom">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* ── Logo ── */}
-            <Link to="/" className="flex flex-col leading-none group" aria-label="JoshiWada Palace Hotel home">
-              <span
-                className={`font-bold text-xl md:text-2xl tracking-[0.3em] transition-colors duration-500 ${logoColor}`}
-                style={{ fontFamily: "'Cinzel', 'Palatino Linotype', serif" }}
-              >
-                JOSHIWADA
-              </span>
-              <span
-                className={`text-[0.45rem] md:text-[0.5rem] tracking-[0.35em] uppercase transition-colors duration-500 ${
-                  scrolled ? 'text-[#c5a059]' : 'text-[#c5a059]'
-                }`}
-                style={{ fontFamily: 'Georgia, serif' }}
-              >
-                PALACE HOTEL
+            <Link to="/" className="flex items-center gap-2.5 group" aria-label="JoshiWada home">
+              <BrandMark className="w-9 h-9 text-[#c5a059] shrink-0" />
+              <span className="flex flex-col leading-none">
+                <span
+                  className={`font-bold text-lg sm:text-xl tracking-[0.14em] transition-colors duration-500 ${logoColor}`}
+                  style={{ fontFamily: "'Cinzel', 'Palatino Linotype', serif" }}
+                >
+                  JOSHIWADA
+                </span>
+                <span className="mt-1 text-[0.45rem] tracking-[0.35em] uppercase text-[#c5a059]" style={{ fontFamily: 'Georgia, serif' }}>
+                  PALACE HOTEL
+                </span>
               </span>
             </Link>
 
             {/* ── Desktop Nav Links ── */}
             <ul className="hidden lg:flex items-center gap-1 xl:gap-2">
-              {NAV_LINKS.map(({ label, to }) => (
+              {NAV_LINKS.map(({ key, to }) => (
                 <li key={to}>
                   <NavLink
                     to={to}
@@ -103,7 +104,7 @@ const Navbar = () => {
                       isActive(to)
                     )}`}
                   >
-                    {label}
+                    {t(key)}
                     <span
                       className={`absolute bottom-0 left-0 h-0.5 bg-[#c5a059] transition-all duration-300 ${
                         isActive(to) ? 'w-full' : 'w-0 group-hover:w-full'
@@ -116,6 +117,17 @@ const Navbar = () => {
 
             {/* ── Desktop Right Actions ── */}
             <div className="hidden lg:flex items-center gap-3 xl:gap-4">
+              <label className="sr-only" htmlFor="desktop-language">Language</label>
+              <select
+                id="desktop-language"
+                value={language}
+                onChange={(event) => setLanguage(event.target.value)}
+                className={`rounded-md border px-2 py-1.5 text-xs font-medium ${showDarkNavbar ? 'border-gray-200 bg-white text-[#0f1f3d]' : 'border-white/40 bg-[#0f1f3d]/60 text-white'}`}
+              >
+                <option value="en">EN</option>
+                <option value="hi">हिंदी</option>
+                <option value="mr">मराठी</option>
+              </select>
               {/* My Bookings (ONLY visible when authenticated) */}
               {isAuthenticated && (
                 <Link
@@ -261,7 +273,7 @@ const Navbar = () => {
                 )}
 
                 {/* Nav Links */}
-                {NAV_LINKS.map(({ label, to }, i) => (
+                {NAV_LINKS.map(({ key, to }, i) => (
                   <motion.div
                     key={to}
                     initial={{ opacity: 0, x: -20 }}
@@ -279,10 +291,22 @@ const Navbar = () => {
                         }`
                       }
                     >
-                      {label}
+                      {t(key)}
                     </NavLink>
                   </motion.div>
                 ))}
+
+                <label htmlFor="mobile-language" className="px-4 pt-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Language / भाषा</label>
+                <select
+                  id="mobile-language"
+                  value={language}
+                  onChange={(event) => setLanguage(event.target.value)}
+                  className="mx-4 mb-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-[#0f1f3d]"
+                >
+                  <option value="en">English</option>
+                  <option value="hi">हिंदी</option>
+                  <option value="mr">मराठी</option>
+                </select>
 
                 {/* Private / Auth-specific items */}
                 <div className="mt-3 pt-3 border-t border-gray-100 flex flex-col gap-2">

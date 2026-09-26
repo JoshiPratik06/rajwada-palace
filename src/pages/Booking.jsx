@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
-  ChevronRight, ChevronLeft, Check, Users, BedDouble, Calendar,
+  ChevronRight, ChevronLeft, Check, Calendar,
   Minus, Plus, Tag, CreditCard, Building2, Smartphone, AlertCircle
 } from 'lucide-react';
 import { roomsData } from '../data/index.js';
@@ -13,8 +13,7 @@ import { useAuth } from '../context/AuthContext';
 import { formatPrice, formatDate, calcNights, generateId, today, getMinCheckout } from '../utils/index.js';
 import { usePageTitle } from '../hooks/index.js';
 import toast from 'react-hot-toast';
-
-const STEPS = ['Room & Dates', 'Guest Details', 'Payment'];
+import { useLanguage } from '../context/LanguageContext';
 
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -34,18 +33,18 @@ const VALID_COUPONS = {
   'FLAT100': { type: 'flat', value: 100, label: '₹100 flat discount' },
 };
 
-function StepIndicator({ current }) {
+function StepIndicator({ current, labels }) {
   return (
-    <div className="flex items-center justify-center mb-8">
-      {STEPS.map((step, i) => (
+    <div className="flex items-center justify-center mb-8" role="group" aria-label={`Booking progress: step ${current + 1} of ${labels.length}`}>
+      {labels.map((step, i) => (
         <React.Fragment key={step}>
-          <div className="flex flex-col items-center">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all ${i < current ? 'bg-[#c5a059] border-[#c5a059] text-white' : i === current ? 'bg-[#0f1f3d] border-[#0f1f3d] text-white' : 'bg-white border-gray-300 text-gray-400'}`}>
+          <div className="flex flex-col items-center" aria-current={i === current ? 'step' : undefined}>
+            <div aria-hidden="true" className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all ${i < current ? 'bg-[#c5a059] border-[#c5a059] text-white' : i === current ? 'bg-[#0f1f3d] border-[#0f1f3d] text-white' : 'bg-white border-gray-300 text-gray-400'}`}>
               {i < current ? <Check size={16} /> : i + 1}
             </div>
-            <span className={`text-xs mt-1.5 font-medium ${i === current ? 'text-[#0f1f3d]' : i < current ? 'text-[#c5a059]' : 'text-gray-400'}`}>{step}</span>
+            <span className={`text-center text-[10px] sm:text-xs mt-1.5 font-medium ${i === current ? 'text-[#0f1f3d]' : i < current ? 'text-[#c5a059]' : 'text-gray-400'}`}>{step}</span>
           </div>
-          {i < STEPS.length - 1 && (
+          {i < labels.length - 1 && (
             <div className={`flex-1 h-0.5 mx-2 mb-5 transition-all ${i < current ? 'bg-[#c5a059]' : 'bg-gray-200'}`} />
           )}
         </React.Fragment>
@@ -59,13 +58,13 @@ function CounterInput({ value, onChange, min = 0, max = 10, label }) {
     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-xl">
       <span className="text-sm font-medium text-gray-700">{label}</span>
       <div className="flex items-center gap-3">
-        <button type="button" onClick={() => onChange(Math.max(min, value - 1))} disabled={value <= min}
-          className="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-[#c5a059] disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+        <button type="button" aria-label={`Decrease ${label.toLowerCase()}`} onClick={() => onChange(Math.max(min, value - 1))} disabled={value <= min}
+          className="w-9 h-9 rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-[#c5a059] disabled:opacity-40 disabled:cursor-not-allowed transition-all">
           <Minus size={14} />
         </button>
-        <span className="w-6 text-center font-bold text-[#0f1f3d]">{value}</span>
-        <button type="button" onClick={() => onChange(Math.min(max, value + 1))} disabled={value >= max}
-          className="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-[#c5a059] disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+        <span className="w-6 text-center font-bold text-[#0f1f3d]" aria-live="polite">{value}</span>
+        <button type="button" aria-label={`Increase ${label.toLowerCase()}`} onClick={() => onChange(Math.min(max, value + 1))} disabled={value >= max}
+          className="w-9 h-9 rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-[#c5a059] disabled:opacity-40 disabled:cursor-not-allowed transition-all">
           <Plus size={14} />
         </button>
       </div>
@@ -158,11 +157,13 @@ function PriceSummary({ room, checkIn, checkOut, adults, children, rooms, coupon
 }
 
 export default function Booking() {
-  usePageTitle('Book a Room');
+  const { t } = useLanguage();
+  usePageTitle(t('booking.title'));
+  const bookingSteps = [t('booking.step.room'), t('booking.step.guest'), t('booking.step.payment')];
   const { slug } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { addBooking, calculatePrice, search } = useBooking();
+  const { addBooking, search } = useBooking();
   const { user } = useAuth();
 
   const stateData = location.state || {};
@@ -229,6 +230,10 @@ export default function Booking() {
     if (!checkIn) { toast.error('Please select check-in date'); return false; }
     if (!checkOut) { toast.error('Please select check-out date'); return false; }
     if (nights <= 0) { toast.error('Check-out must be after check-in'); return false; }
+    if (adults + children > selectedRoom.maxGuests * rooms) {
+      toast.error(`This room accommodates up to ${selectedRoom.maxGuests * rooms} guests across ${rooms} room${rooms > 1 ? 's' : ''}.`);
+      return false;
+    }
     return true;
   };
 
@@ -242,7 +247,7 @@ export default function Booking() {
     else if (!/^\d{10}$/.test(guest.phone.replace(/\s/g, ''))) newErrors.phone = 'Enter a valid 10-digit phone number';
     if (!guest.nationality) newErrors.nationality = 'Please select your nationality';
     if (!guest.arrivalTime) newErrors.arrivalTime = 'Please select estimated arrival time';
-    if (!guest.agreeTerms) newErrors.agreeTerms = 'You must agree to the terms';
+    if (!guest.agreeTerms) newErrors.agreeTerms = 'Please confirm you understand this is a demo booking.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -269,6 +274,7 @@ export default function Booking() {
   const handleConfirm = () => {
     const pricing = getTotal();
     const bookingData = {
+      id: generateId(),
       userId: user?.id || null,
       userEmail: user?.email || guest.email,
       userName: user?.name || `${guest.firstName} ${guest.lastName}`.trim(),
@@ -285,20 +291,24 @@ export default function Booking() {
       ...pricing,
     };
     addBooking(bookingData);
-    navigate('/booking-confirmation', { state: { booking: { ...bookingData, id: `RJW${Date.now()}` } } });
+    navigate('/booking-confirmation', { state: { booking: bookingData } });
   };
 
   const gField = (key, label, type = 'text', placeholder = '') => (
     <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>
+      <label htmlFor={`guest-${key}`} className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>
       <input
+        id={`guest-${key}`}
         type={type}
         value={guest[key]}
         onChange={e => { setGuest(g => ({ ...g, [key]: e.target.value })); if (errors[key]) setErrors(er => ({ ...er, [key]: '' })); }}
         placeholder={placeholder}
         className={`input-field w-full ${errors[key] ? 'border-red-400 bg-red-50' : ''}`}
+        aria-invalid={Boolean(errors[key])}
+        aria-describedby={errors[key] ? `guest-${key}-error` : undefined}
+        autoComplete={{ firstName: 'given-name', lastName: 'family-name', email: 'email', phone: 'tel' }[key]}
       />
-      {errors[key] && <p className="text-red-500 text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} />{errors[key]}</p>}
+      {errors[key] && <p id={`guest-${key}-error`} role="alert" className="text-red-500 text-xs mt-1 flex items-center gap-1"><AlertCircle size={12} />{errors[key]}</p>}
     </div>
   );
 
@@ -312,8 +322,8 @@ export default function Booking() {
     <div className="min-h-screen bg-[#fdfaf1]">
       {/* Hero */}
       <div className="bg-[#0f1f3d] py-10 text-center">
-        <p className="text-[#c5a059] text-sm tracking-widest uppercase mb-2">Book Your Stay</p>
-        <h1 className="text-white text-3xl font-bold">Reserve a Room</h1>
+        <p className="text-[#c5a059] text-sm tracking-widest uppercase mb-2">{t('home.book')}</p>
+        <h1 className="text-white text-3xl font-bold">{t('booking.title')}</h1>
       </div>
 
       {/* Breadcrumb */}
@@ -331,7 +341,13 @@ export default function Booking() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="max-w-xl mx-auto mb-8">
-          <StepIndicator current={step} />
+          <StepIndicator
+            current={step}
+            labels={bookingSteps}
+          />
+          <p className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900">
+            {t('booking.demo')}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -341,13 +357,14 @@ export default function Booking() {
               {/* STEP 1: Room & Dates */}
               {step === 0 && (
                 <motion.div key="step1" variants={slideVariants} custom={1} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}>
-                  <div className="bg-white rounded-2xl card-shadow p-6 space-y-6">
-                    <h2 className="text-2xl font-bold text-[#0f1f3d]">Room & Dates</h2>
+                  <div className="bg-white rounded-2xl card-shadow p-4 sm:p-6 space-y-6">
+                    <h2 className="text-2xl font-bold text-[#0f1f3d]">{t('booking.roomDates')}</h2>
 
                     {/* Room Selector */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Selected Room</label>
+                      <label htmlFor="selected-room" className="block text-sm font-semibold text-gray-700 mb-2">Selected Room</label>
                       <select
+                        id="selected-room"
                         value={selectedRoom?.slug || ''}
                         onChange={e => setSelectedRoom(roomsData.find(r => r.slug === e.target.value))}
                         className="input-field w-full"
@@ -376,7 +393,7 @@ export default function Booking() {
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
                           <Calendar size={15} className="text-[#c5a059]" />
-                          <span>Check-in Date</span>
+                          <span id="checkin-label">Check-in Date</span>
                         </label>
                         <DatePicker
                           selected={checkIn}
@@ -385,12 +402,13 @@ export default function Booking() {
                           placeholderText="Select check-in date"
                           className="input-field w-full cursor-pointer py-2.5 rounded-xl border-gray-300 focus:border-[#c5a059]"
                           dateFormat="dd MMM yyyy"
+                          ariaLabelledBy="checkin-label"
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
                           <Calendar size={15} className="text-[#c5a059]" />
-                          <span>Check-out Date</span>
+                          <span id="checkout-label">Check-out Date</span>
                         </label>
                         <DatePicker
                           selected={checkOut}
@@ -400,6 +418,7 @@ export default function Booking() {
                           className="input-field w-full cursor-pointer py-2.5 rounded-xl border-gray-300 focus:border-[#c5a059] disabled:bg-gray-100 disabled:cursor-not-allowed"
                           dateFormat="dd MMM yyyy"
                           disabled={!checkIn}
+                          ariaLabelledBy="checkout-label"
                         />
                       </div>
                     </div>
@@ -412,9 +431,9 @@ export default function Booking() {
 
                     {/* Guests */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <CounterInput label="Adults" value={adults} onChange={setAdults} min={1} max={10} />
-                      <CounterInput label="Children" value={children} onChange={setChildren} min={0} max={5} />
-                      <CounterInput label="Rooms" value={rooms} onChange={setRooms} min={1} max={5} />
+                      <CounterInput label={t('booking.adults')} value={adults} onChange={setAdults} min={1} max={10} />
+                      <CounterInput label={t('booking.children')} value={children} onChange={setChildren} min={0} max={5} />
+                      <CounterInput label={t('booking.rooms')} value={rooms} onChange={setRooms} min={1} max={5} />
                     </div>
                   </div>
                 </motion.div>
@@ -423,8 +442,8 @@ export default function Booking() {
               {/* STEP 2: Guest Details */}
               {step === 1 && (
                 <motion.div key="step2" variants={slideVariants} custom={1} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}>
-                  <div className="bg-white rounded-2xl card-shadow p-6 space-y-5">
-                    <h2 className="text-2xl font-bold text-[#0f1f3d]">Guest Details</h2>
+                  <div className="bg-white rounded-2xl card-shadow p-4 sm:p-6 space-y-5">
+                    <h2 className="text-2xl font-bold text-[#0f1f3d]">{t('booking.guestDetails')}</h2>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       {gField('firstName', 'First Name *', 'text', 'Enter first name')}
@@ -434,8 +453,8 @@ export default function Booking() {
                     {gField('phone', 'Phone Number *', 'tel', '10-digit mobile number')}
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nationality / State *</label>
-                      <select value={guest.nationality} onChange={e => { setGuest(g => ({ ...g, nationality: e.target.value })); if (errors.nationality) setErrors(er => ({ ...er, nationality: '' })); }}
+                      <label htmlFor="guest-nationality" className="block text-sm font-semibold text-gray-700 mb-1.5">Nationality / State *</label>
+                      <select id="guest-nationality" value={guest.nationality} onChange={e => { setGuest(g => ({ ...g, nationality: e.target.value })); if (errors.nationality) setErrors(er => ({ ...er, nationality: '' })); }}
                         className={`input-field w-full ${errors.nationality ? 'border-red-400 bg-red-50' : ''}`}>
                         <option value="">Select state / nationality</option>
                         {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -444,8 +463,8 @@ export default function Booking() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Estimated Arrival Time *</label>
-                      <select value={guest.arrivalTime} onChange={e => { setGuest(g => ({ ...g, arrivalTime: e.target.value })); if (errors.arrivalTime) setErrors(er => ({ ...er, arrivalTime: '' })); }}
+                      <label htmlFor="guest-arrival-time" className="block text-sm font-semibold text-gray-700 mb-1.5">Estimated Arrival Time *</label>
+                      <select id="guest-arrival-time" value={guest.arrivalTime} onChange={e => { setGuest(g => ({ ...g, arrivalTime: e.target.value })); if (errors.arrivalTime) setErrors(er => ({ ...er, arrivalTime: '' })); }}
                         className={`input-field w-full ${errors.arrivalTime ? 'border-red-400 bg-red-50' : ''}`}>
                         <option value="">Select time window</option>
                         {ARRIVAL_TIMES.map(t => <option key={t} value={t}>{t}</option>)}
@@ -454,21 +473,24 @@ export default function Booking() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Special Requests</label>
-                      <textarea value={guest.specialRequests} onChange={e => setGuest(g => ({ ...g, specialRequests: e.target.value }))}
+                      <label htmlFor="guest-special-requests" className="block text-sm font-semibold text-gray-700 mb-1.5">Special Requests</label>
+                      <textarea id="guest-special-requests" value={guest.specialRequests} onChange={e => setGuest(g => ({ ...g, specialRequests: e.target.value }))}
                         placeholder="Any dietary requirements, accessibility needs, special occasions..." rows={3}
                         className="input-field w-full resize-none" />
                     </div>
 
                     <div>
                       <label className={`flex items-start gap-3 cursor-pointer group ${errors.agreeTerms ? 'text-red-500' : ''}`}>
-                        <div className={`w-5 h-5 shrink-0 mt-0.5 rounded border-2 flex items-center justify-center transition-all ${guest.agreeTerms ? 'bg-[#c5a059] border-[#c5a059]' : 'border-gray-300'}`}
-                          onClick={() => { setGuest(g => ({ ...g, agreeTerms: !g.agreeTerms })); if (errors.agreeTerms) setErrors(er => ({ ...er, agreeTerms: '' })); }}>
-                          {guest.agreeTerms && <Check size={12} className="text-white" />}
-                        </div>
-                        <span className="text-sm text-gray-600">I agree to the <Link to="#" className="text-[#c5a059] underline">Terms & Conditions</Link> and <Link to="#" className="text-[#c5a059] underline">Cancellation Policy</Link>. *</span>
+                        <input
+                          type="checkbox"
+                          checked={guest.agreeTerms}
+                          onChange={e => { setGuest(g => ({ ...g, agreeTerms: e.target.checked })); if (errors.agreeTerms) setErrors(er => ({ ...er, agreeTerms: '' })); }}
+                          className="mt-0.5 h-5 w-5 shrink-0 accent-[#c5a059]"
+                          aria-describedby={errors.agreeTerms ? 'agree-terms-error' : undefined}
+                        />
+                        <span className="text-sm text-gray-600">I understand this is a demo booking. Details stay in this browser and no payment is processed. *</span>
                       </label>
-                      {errors.agreeTerms && <p className="text-red-500 text-xs mt-1 flex items-center gap-1 ml-8"><AlertCircle size={12} />{errors.agreeTerms}</p>}
+                      {errors.agreeTerms && <p id="agree-terms-error" role="alert" className="text-red-500 text-xs mt-1 flex items-center gap-1 ml-8"><AlertCircle size={12} />{errors.agreeTerms}</p>}
                     </div>
                   </div>
                 </motion.div>
@@ -477,8 +499,8 @@ export default function Booking() {
               {/* STEP 3: Payment */}
               {step === 2 && (
                 <motion.div key="step3" variants={slideVariants} custom={1} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}>
-                  <div className="bg-white rounded-2xl card-shadow p-6 space-y-6">
-                    <h2 className="text-2xl font-bold text-[#0f1f3d]">Payment & Confirmation</h2>
+                  <div className="bg-white rounded-2xl card-shadow p-4 sm:p-6 space-y-6">
+                    <h2 className="text-2xl font-bold text-[#0f1f3d]">{t('booking.payment')}</h2>
 
                     {/* Full Booking Summary */}
                     <div className="bg-[#fdfaf1] rounded-xl p-5 space-y-3 text-sm">
@@ -514,22 +536,22 @@ export default function Booking() {
                         <div className="flex gap-2">
                           <input value={couponInput} onChange={e => setCouponInput(e.target.value)} placeholder="ROYAL10 / JOSHIWADA20 / FLAT100"
                             className="input-field flex-1" onKeyDown={e => e.key === 'Enter' && applyCoupon()} />
-                          <button onClick={applyCoupon} className="btn-primary px-6">Apply</button>
+                          <button type="button" onClick={applyCoupon} className="btn-primary px-6">Apply</button>
                         </div>
                       )}
                     </div>
 
                     {/* Payment Method */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-3">Payment Method</label>
+                    <fieldset>
+                      <legend className="block text-sm font-semibold text-gray-700 mb-3">Preferred Payment Method</legend>
                       <div className="space-y-3">
                         {[
-                          { id: 'hotel', icon: <Building2 size={20} />, title: 'Pay at Hotel', desc: 'Pay when you arrive. No upfront payment required.' },
-                          { id: 'upi', icon: <Smartphone size={20} />, title: 'UPI Payment', desc: 'Pay instantly via UPI (GPay, PhonePe, Paytm)' },
-                          { id: 'card', icon: <CreditCard size={20} />, title: 'Credit / Debit Card', desc: 'Visa, Mastercard, RuPay accepted' },
+                          { id: 'hotel', icon: <Building2 size={20} />, title: 'Pay at Hotel', desc: 'Saved as your preference in this demo.' },
+                          { id: 'upi', icon: <Smartphone size={20} />, title: 'UPI Payment', desc: 'Saved as your preference in this demo.' },
+                          { id: 'card', icon: <CreditCard size={20} />, title: 'Credit / Debit Card', desc: 'Saved as your preference in this demo.' },
                         ].map(method => (
-                          <label key={method.id} className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${paymentMethod === method.id ? 'border-[#c5a059] bg-[#c5a059]/5' : 'border-gray-200 hover:border-gray-300'}`}>
-                            <input type="radio" value={method.id} checked={paymentMethod === method.id} onChange={() => setPaymentMethod(method.id)} className="hidden" />
+                          <label key={method.id} className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all focus-within:ring-2 focus-within:ring-[#c5a059] focus-within:ring-offset-2 ${paymentMethod === method.id ? 'border-[#c5a059] bg-[#c5a059]/5' : 'border-gray-200 hover:border-gray-300'}`}>
+                            <input type="radio" name="payment-method" value={method.id} checked={paymentMethod === method.id} onChange={() => setPaymentMethod(method.id)} className="sr-only" />
                             <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${paymentMethod === method.id ? 'border-[#c5a059]' : 'border-gray-300'}`}>
                               {paymentMethod === method.id && <div className="w-2.5 h-2.5 rounded-full bg-[#c5a059]" />}
                             </div>
@@ -541,12 +563,13 @@ export default function Booking() {
                           </label>
                         ))}
                       </div>
-                    </div>
+                      <p className="mt-3 text-xs text-gray-500">Payment is not collected or processed on this demo site.</p>
+                    </fieldset>
 
-                    <button onClick={handleConfirm} className="w-full btn-primary text-base py-4">
-                      ✓ Confirm Booking
+                    <button type="button" onClick={handleConfirm} className="w-full btn-primary text-base py-4">
+                      ✓ Save Demo Booking
                     </button>
-                    <p className="text-center text-xs text-gray-400">Your information is encrypted and secure</p>
+                    <p className="text-center text-xs text-gray-500">Demo booking data is saved in this browser only; no payment is processed.</p>
                   </div>
                 </motion.div>
               )}
@@ -555,7 +578,7 @@ export default function Booking() {
             {/* Navigation Buttons */}
             <div className="flex justify-between mt-6">
               {step > 0 ? (
-                <button onClick={handleBack} className="flex items-center gap-2 btn-secondary">
+                <button type="button" onClick={handleBack} className="flex items-center gap-2 btn-secondary">
                   <ChevronLeft size={18} /> Back
                 </button>
               ) : (
@@ -563,8 +586,8 @@ export default function Booking() {
                   <ChevronLeft size={18} /> Browse Rooms
                 </Link>
               )}
-              {step < STEPS.length - 1 && (
-                <button onClick={handleNext} className="flex items-center gap-2 btn-primary">
+              {step < bookingSteps.length - 1 && (
+                <button type="button" onClick={handleNext} className="flex items-center gap-2 btn-primary">
                   Next <ChevronRight size={18} />
                 </button>
               )}
@@ -572,7 +595,7 @@ export default function Booking() {
           </div>
 
           {/* Sidebar: Price Summary next right to the section */}
-          <div className="lg:col-span-5 xl:col-span-4 sticky top-24">
+          <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24">
             <PriceSummary
               room={selectedRoom}
               checkIn={checkIn}

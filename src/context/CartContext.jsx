@@ -43,7 +43,15 @@ const coupons = {
 export const CartProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const initialState = {
-    items: (() => { try { return JSON.parse(localStorage.getItem('cart') || '[]'); } catch { return []; } })(),
+    items: (() => {
+      try {
+        const stored = JSON.parse(localStorage.getItem('cart') || '[]');
+        return Array.isArray(stored) ? stored : [];
+      } catch (error) {
+        console.error('Unable to read locally saved demo cart', error);
+        return [];
+      }
+    })(),
     coupon: null,
     serviceType: 'dine-in',
     roomNumber: '',
@@ -52,7 +60,12 @@ export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(state.items));
+    try {
+      localStorage.setItem('cart', JSON.stringify(state.items));
+    } catch (error) {
+      console.error('Unable to save locally stored demo cart', error);
+      toast.error('Browser storage is unavailable. Your cart may not persist.');
+    }
   }, [state.items]);
 
   const addItem = (item) => {
@@ -123,4 +136,3 @@ export const useCart = () => {
   if (!ctx) throw new Error('useCart must be used within CartProvider');
   return ctx;
 };
-

@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { BookingProvider } from './context/BookingContext';
+import { LanguageProvider } from './context/LanguageContext';
 import MainLayout from './layouts/MainLayout';
 import LoadingPage from './components/LoadingPage';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -30,59 +31,61 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <BookingProvider>
-          <CartProvider>
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                duration: 3000,
-                style: { fontFamily: 'Poppins, sans-serif', fontSize: '14px', borderRadius: '4px' },
-                success: { style: { borderLeft: '4px solid #c5a059' } },
-                error: { style: { borderLeft: '4px solid #ef4444' } },
-              }}
-            />
-            <Suspense fallback={<LoadingPage />}>
-              <Routes>
-                <Route element={<MainLayout />}>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/rooms" element={<Rooms />} />
-                  <Route path="/rooms/:slug" element={<RoomDetail />} />
-                  <Route path="/booking" element={<Booking />} />
-                  <Route path="/booking/:slug" element={<Booking />} />
-                  <Route path="/booking-confirmation" element={<BookingConfirmation />} />
-                  <Route path="/restaurant" element={<Restaurant />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/facilities" element={<Facilities />} />
-                  <Route path="/gallery" element={<Gallery />} />
-                  <Route path="/offers" element={<Offers />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/reviews" element={<Reviews />} />
-                  <Route path="/login" element={<Auth />} />
-                  <Route path="/signup" element={<Auth />} />
-                  <Route
-                    path="/my-bookings"
-                    element={
-                      <ProtectedRoute>
-                        <MyBookings />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/bookings"
-                    element={
-                      <ProtectedRoute>
-                        <MyBookings />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route path="/order-confirmation" element={<OrderConfirmation />} />
-                  <Route path="/404" element={<NotFound />} />
-                  <Route path="*" element={<Navigate to="/404" replace />} />
-                </Route>
-              </Routes>
-            </Suspense>
-          </CartProvider>
-        </BookingProvider>
+        <LanguageProvider>
+          <BookingProvider>
+            <CartProvider>
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  duration: 3000,
+                  style: { fontFamily: 'Poppins, sans-serif', fontSize: '14px', borderRadius: '4px' },
+                  success: { style: { borderLeft: '4px solid #c5a059' } },
+                  error: { style: { borderLeft: '4px solid #ef4444' } },
+                }}
+              />
+              <Suspense fallback={<LoadingPage />}>
+                <Routes>
+                  <Route element={<MainLayout />}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/rooms" element={<Rooms />} />
+                    <Route path="/rooms/:slug" element={<RoomDetail />} />
+                    <Route path="/booking" element={<Booking />} />
+                    <Route path="/booking/:slug" element={<Booking />} />
+                    <Route path="/booking-confirmation" element={<BookingConfirmation />} />
+                    <Route path="/restaurant" element={<Restaurant />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/facilities" element={<Facilities />} />
+                    <Route path="/gallery" element={<Gallery />} />
+                    <Route path="/offers" element={<Offers />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/reviews" element={<Reviews />} />
+                    <Route path="/login" element={<Auth />} />
+                    <Route path="/signup" element={<Auth />} />
+                    <Route
+                      path="/my-bookings"
+                      element={
+                        <ProtectedRoute>
+                          <MyBookings />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/bookings"
+                      element={
+                        <ProtectedRoute>
+                          <MyBookings />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                    <Route path="/404" element={<NotFound />} />
+                    <Route path="*" element={<Navigate to="/404" replace />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </CartProvider>
+          </BookingProvider>
+        </LanguageProvider>
       </AuthProvider>
     </BrowserRouter>
   );

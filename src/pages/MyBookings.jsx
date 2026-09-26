@@ -68,7 +68,7 @@ function BookingCard({ booking, onCancel }) {
   const isCancelled = booking.status === 'cancelled';
 
   const handleModify = () => {
-    toast('To modify your booking, please call +91 731 243 0000', { icon: '📞', duration: 4000 });
+    toast('To modify your booking, please call +91 8485214578', { icon: '📞', duration: 4000 });
   };
 
   return (
@@ -248,7 +248,7 @@ export default function MyBookings() {
       <div className="bg-[#0f1f3d] py-14 text-center relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#c5a059_1px,transparent_1px)] [background-size:16px_16px]" />
         <div className="relative z-10 max-w-2xl mx-auto px-4">
-          <p className="text-[#c5a059] text-sm tracking-widest uppercase mb-2">JoshiWada Palace Hotel</p>
+          <p className="text-[#c5a059] text-sm tracking-widest uppercase mb-2">JoshiWada</p>
           <h1 className="text-white text-4xl font-bold mb-2">My Bookings & Orders</h1>
           <p className="text-white/70 text-sm mb-4">
             Welcome back, <span className="text-[#c5a059] font-semibold">{user?.name || 'Valued Guest'}</span> ({user?.email})
@@ -268,6 +268,10 @@ export default function MyBookings() {
       </div>
 
       <div className="container-custom py-10">
+        <p role="note" className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900">
+          These bookings and orders are stored in this browser only. This front-end demo does not submit reservations, food orders, or payments to the hotel.
+        </p>
+
         {/* Tabs */}
         <div className="flex gap-2 bg-white rounded-xl p-1.5 card-shadow mb-8 w-fit">
           {[
@@ -336,7 +340,7 @@ export default function MyBookings() {
               >
                 <div className="text-8xl mb-6">🏨</div>
                 <h3 className="text-2xl font-bold text-[#0f1f3d] mb-3">No bookings yet</h3>
-                <p className="text-gray-500 mb-8 max-w-sm mx-auto">You haven't made any reservations. Book a luxurious room at JoshiWada Palace and experience royal hospitality.</p>
+                <p className="text-gray-500 mb-8 max-w-sm mx-auto">You haven't made any reservations. Book a luxurious room at JoshiWada and experience royal hospitality.</p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link to="/rooms" className="btn-primary flex items-center justify-center gap-2">
                     <BookOpen size={18} /> Book a Room

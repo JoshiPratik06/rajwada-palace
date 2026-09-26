@@ -132,7 +132,7 @@ export default function Auth() {
               Royal Heritage
             </span>
             <h2 className="text-2xl md:text-3xl font-bold font-serif leading-tight">
-              JoshiWada Palace Portal
+              JoshiWada Portal
             </h2>
             <div className="w-12 h-0.5 bg-[#c5a059] my-4" />
             <p className="text-gray-300 text-sm leading-relaxed mb-6">

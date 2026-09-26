@@ -2,7 +2,7 @@
  * Toast.jsx
  *
  * Re-exports react-hot-toast's `toast` function with pre-configured
- * default options matching JoshiWada Palace Hotel's brand palette.
+ * default options matching JoshiWada's brand palette.
  *
  * Usage anywhere in the app:
  *   import toast from '../components/Toast';  // or from 'react-hot-toast'
