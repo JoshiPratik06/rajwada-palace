@@ -52,7 +52,7 @@ export const useLockBodyScroll = (locked) => {
 
 export const usePageTitle = (title) => {
   useEffect(() => {
-    document.title = `${title} | Rajwada Palace Hotel`;
+    document.title = `${title} | JoshiWada Palace Hotel, Pune`;
   }, [title]);
 };
 

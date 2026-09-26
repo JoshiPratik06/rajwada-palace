@@ -28,14 +28,14 @@ export default function BookingConfirmation() {
   }
 
   const { room, checkIn, checkOut, nights, adults, children, rooms, guest, paymentMethod, total, base, tax, discount, coupon, id } = booking;
-  const bookingId = id || `RJW${Date.now()}`;
+  const bookingId = id || `JSW${Date.now()}`;
 
   const paymentLabels = { hotel: 'Pay at Hotel', upi: 'UPI Payment', card: 'Credit / Debit Card' };
 
   return (
     <div className="min-h-screen bg-[#fdfaf1]">
       <div className="bg-[#0f1f3d] py-10 text-center">
-        <p className="text-[#c5a059] text-sm tracking-widest uppercase mb-2">Rajwada Palace Hotel</p>
+        <p className="text-[#c5a059] text-sm tracking-widest uppercase mb-2">JoshiWada Palace Hotel</p>
         <h1 className="text-white text-3xl font-bold">Booking Confirmation</h1>
       </div>
 

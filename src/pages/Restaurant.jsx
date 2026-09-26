@@ -105,7 +105,7 @@ const Restaurant = () => {
           className="relative text-center px-4"
         >
           <p className="text-[#c5a059] text-sm font-semibold tracking-[4px] uppercase mb-3">
-            Rajwada Palace Hotel
+            JoshiWada Palace Hotel
           </p>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
             Royal Dining Experience

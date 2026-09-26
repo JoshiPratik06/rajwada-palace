@@ -11,7 +11,7 @@ const DEFAULT_USERS = [
   {
     id: 'USR_DEMO_01',
     name: 'Pratik Joshi',
-    email: 'guest@rajwada.com',
+    email: 'guest@joshiwada.com',
     phone: '9876543210',
     password: 'password123',
     avatar: 'PJ',
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
 
     // Automatically log in newly signed up user
     setUser(newUser);
-    toast.success(`Welcome to Rajwada Palace, ${newUser.name}!`, { icon: '👑' });
+    toast.success(`Welcome to JoshiWada Palace, ${newUser.name}!`, { icon: '👑' });
     return { success: true, user: newUser };
   };
 

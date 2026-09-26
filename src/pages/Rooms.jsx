@@ -201,7 +201,7 @@ export default function Rooms() {
           transition={{ duration: 0.6 }}
           className="relative text-center"
         >
-          <p className="text-[#c5a059] text-sm tracking-[4px] uppercase mb-3">Rajwada Palace Hotel</p>
+          <p className="text-[#c5a059] text-sm tracking-[4px] uppercase mb-3">JoshiWada Palace Hotel</p>
           <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">Our Rooms & Suites</h1>
           <div className="gold-line mx-auto" />
         </motion.div>

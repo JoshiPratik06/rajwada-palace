@@ -288,7 +288,7 @@ const Cart = ({ isOpen, onClose }) => {
 
                 {/* Hints for valid coupons */}
                 <p className="text-[10px] text-gray-400 -mt-2">
-                  Try: ROYAL10 · RAJWADA20 · FLAT100 · WELCOME50
+                  Try: ROYAL10 · JOSHIWADA20 · FLAT100 · WELCOME50
                 </p>
 
                 {/* Price Breakdown */}

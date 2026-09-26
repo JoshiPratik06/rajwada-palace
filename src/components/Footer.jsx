@@ -31,25 +31,25 @@ const SERVICES = [
 const SOCIAL_LINKS = [
   {
     Icon: Instagram,
-    href: 'https://instagram.com/rajwadapalacehotel',
+    href: 'https://instagram.com/joshiwadapalacehotel',
     label: 'Instagram',
     color: 'hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-600',
   },
   {
     Icon: Facebook,
-    href: 'https://facebook.com/rajwadapalacehotel',
+    href: 'https://facebook.com/joshiwadapalacehotel',
     label: 'Facebook',
     color: 'hover:bg-blue-600',
   },
   {
     Icon: Twitter,
-    href: 'https://twitter.com/rajwadahotel',
+    href: 'https://twitter.com/joshiwadahotel',
     label: 'Twitter / X',
     color: 'hover:bg-sky-500',
   },
   {
     Icon: Youtube,
-    href: 'https://youtube.com/@rajwadapalace',
+    href: 'https://youtube.com/@joshiwadapalace',
     label: 'YouTube',
     color: 'hover:bg-red-600',
   },
@@ -84,7 +84,7 @@ const Footer = () => {
     setLoading(true);
     await new Promise((r) => setTimeout(r, 800));
     setLoading(false);
-    toast.success('🎉 Subscribed! Welcome to the Rajwada family.', {
+    toast.success('🎉 Subscribed! Welcome to the JoshiWada family.', {
       duration: 4000,
       style: { background: '#0f1f3d', color: '#fdfaf1', border: '1px solid #c5a059' },
     });
@@ -110,7 +110,7 @@ const Footer = () => {
                   className="text-2xl font-bold tracking-[0.3em] text-[#c5a059]"
                   style={{ fontFamily: "'Cinzel', 'Palatino Linotype', serif" }}
                 >
-                  RAJWADA
+                  JOSHIWADA
                 </span>
               </div>
               <p
@@ -122,8 +122,8 @@ const Footer = () => {
             </div>
 
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Experience the timeless grandeur of Rajwada Palace Hotel — where royal Malwa heritage
-              meets contemporary luxury in the heart of Indore, Madhya Pradesh.
+              Experience the timeless grandeur of JoshiWada Palace Hotel — where royal heritage
+              meets contemporary luxury in the heart of Shivajinagar, Pune.
             </p>
 
             {/* Star rating */}
@@ -192,33 +192,33 @@ const Footer = () => {
             <ul className="space-y-4 mb-8">
               <li>
                 <a
-                  href="https://maps.google.com/?q=Rajwada+Circle+Indore"
+                  href="https://maps.google.com/?q=Shivajinagar+Pune"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 text-gray-400 hover:text-[#c5a059] transition-colors duration-200 group"
                 >
                   <MapPin size={16} className="text-[#c5a059] mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" strokeWidth={1.8} />
                   <span className="text-sm leading-snug">
-                    Rajwada Circle, Indore<br />Madhya Pradesh 452002
+                    Shivajinagar, Pune<br />Maharashtra 411005
                   </span>
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+917312430000"
+                  href="tel:+912025500000"
                   className="flex items-center gap-3 text-gray-400 hover:text-[#c5a059] transition-colors duration-200 group"
                 >
                   <Phone size={16} className="text-[#c5a059] flex-shrink-0 group-hover:scale-110 transition-transform" strokeWidth={1.8} />
-                  <span className="text-sm">+91 731 243 0000</span>
+                  <span className="text-sm">+91 20 2550 0000</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:stay@rajwada.com"
+                  href="mailto:stay@joshiwada.com"
                   className="flex items-center gap-3 text-gray-400 hover:text-[#c5a059] transition-colors duration-200 group"
                 >
                   <Mail size={16} className="text-[#c5a059] flex-shrink-0 group-hover:scale-110 transition-transform" strokeWidth={1.8} />
-                  <span className="text-sm">stay@rajwada.com</span>
+                  <span className="text-sm">stay@joshiwada.com</span>
                 </a>
               </li>
             </ul>
@@ -273,7 +273,7 @@ const Footer = () => {
       <div className="container-custom py-5">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center">
           <p className="text-gray-500 text-xs">
-            &copy; {new Date().getFullYear()} Rajwada Palace Hotel. All rights reserved.
+            &copy; {new Date().getFullYear()} JoshiWada Palace Hotel. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
             <Link to="/privacy-policy" className="text-gray-500 hover:text-[#c5a059] text-xs transition-colors duration-200">

@@ -30,7 +30,7 @@ const ARRIVAL_TIMES = [
 
 const VALID_COUPONS = {
   'ROYAL10': { type: 'percent', value: 10, label: '10% off your booking' },
-  'RAJWADA20': { type: 'percent', value: 20, label: '20% off your booking' },
+  'JOSHIWADA20': { type: 'percent', value: 20, label: '20% off your booking' },
   'FLAT100': { type: 'flat', value: 100, label: '₹100 flat discount' },
 };
 
@@ -512,7 +512,7 @@ export default function Booking() {
                         </div>
                       ) : (
                         <div className="flex gap-2">
-                          <input value={couponInput} onChange={e => setCouponInput(e.target.value)} placeholder="ROYAL10 / RAJWADA20 / FLAT100"
+                          <input value={couponInput} onChange={e => setCouponInput(e.target.value)} placeholder="ROYAL10 / JOSHIWADA20 / FLAT100"
                             className="input-field flex-1" onKeyDown={e => e.key === 'Enter' && applyCoupon()} />
                           <button onClick={applyCoupon} className="btn-primary px-6">Apply</button>
                         </div>

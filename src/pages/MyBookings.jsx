@@ -248,7 +248,7 @@ export default function MyBookings() {
       <div className="bg-[#0f1f3d] py-14 text-center relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#c5a059_1px,transparent_1px)] [background-size:16px_16px]" />
         <div className="relative z-10 max-w-2xl mx-auto px-4">
-          <p className="text-[#c5a059] text-sm tracking-widest uppercase mb-2">Rajwada Palace Hotel</p>
+          <p className="text-[#c5a059] text-sm tracking-widest uppercase mb-2">JoshiWada Palace Hotel</p>
           <h1 className="text-white text-4xl font-bold mb-2">My Bookings & Orders</h1>
           <p className="text-white/70 text-sm mb-4">
             Welcome back, <span className="text-[#c5a059] font-semibold">{user?.name || 'Valued Guest'}</span> ({user?.email})
@@ -336,7 +336,7 @@ export default function MyBookings() {
               >
                 <div className="text-8xl mb-6">🏨</div>
                 <h3 className="text-2xl font-bold text-[#0f1f3d] mb-3">No bookings yet</h3>
-                <p className="text-gray-500 mb-8 max-w-sm mx-auto">You haven't made any reservations. Book a luxurious room at Rajwada Palace and experience royal hospitality.</p>
+                <p className="text-gray-500 mb-8 max-w-sm mx-auto">You haven't made any reservations. Book a luxurious room at JoshiWada Palace and experience royal hospitality.</p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link to="/rooms" className="btn-primary flex items-center justify-center gap-2">
                     <BookOpen size={18} /> Book a Room

@@ -279,27 +279,27 @@ export default function Contact() {
                 {
                   icon: MapPin,
                   label: 'Address',
-                  lines: ['Rajwada Circle, Indore,', 'Madhya Pradesh 452002, India'],
+                  lines: ['Shivajinagar, Pune,', 'Maharashtra 411005, India'],
                 },
                 {
                   icon: Phone,
                   label: 'Main Reservations',
-                  lines: ['+91 731 243 0000'],
+                  lines: ['+91 20 2550 0000'],
                 },
                 {
                   icon: Phone,
                   label: 'Front Desk (24/7)',
-                  lines: ['+91 731 243 0001'],
+                  lines: ['+91 20 2550 0001'],
                 },
                 {
                   icon: Phone,
                   label: 'Emergency',
-                  lines: ['+91 731 243 0002'],
+                  lines: ['+91 20 2550 0002'],
                 },
                 {
                   icon: Mail,
                   label: 'Email',
-                  lines: ['stay@rajwada.com'],
+                  lines: ['stay@joshiwada.com'],
                 },
                 {
                   icon: Clock,
@@ -360,14 +360,14 @@ export default function Contact() {
           style={{ height: '420px' }}
         >
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.9563456789012!2d75.85701!3d22.71888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fcad1b410ddb%3A0x96b54d72d0b59816!2sRajwada%2C%20Indore%2C%20Madhya%20Pradesh!5e0!3m2!1sen!2sin!4v1234567890"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.986877993437!2d73.8447!3d18.5314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c0792d4b9b9d%3A0xa621532168d1f2b6!2sShivajinagar%2C%20Pune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1234567890"
             width="100%"
             height="100%"
             style={{ border: 0 }}
             allowFullScreen=""
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="Rajwada Palace Hotel Location"
+            title="JoshiWada Palace Hotel Location"
           />
         </motion.div>
       </section>

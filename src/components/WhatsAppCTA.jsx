@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 
-const WHATSAPP_NUMBER = '917312430000';
+const WHATSAPP_NUMBER = '912025501234';
 const PRESET_MESSAGE = encodeURIComponent(
-  'Hello! I am interested in booking a room at Rajwada Palace Hotel. Could you please assist me?'
+  'Hello! I am interested in booking a room at JoshiWada Palace Hotel, Pune. Could you please assist me?'
 );
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${PRESET_MESSAGE}`;
 

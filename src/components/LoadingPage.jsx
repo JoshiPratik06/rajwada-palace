@@ -33,7 +33,7 @@ const LoadingPage = () => {
           className="text-[#c5a059] text-3xl sm:text-4xl font-bold"
           style={{ fontFamily: "'Cinzel', 'Palatino Linotype', serif" }}
         >
-          RAJWADA
+          JOSHIWADA
         </motion.h1>
 
         <motion.p

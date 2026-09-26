@@ -38,19 +38,6 @@ const Navbar = () => {
     };
   }, [menuOpen]);
 
-  const [isDemoAlertOpen, setIsDemoAlertOpen] = useState(() => {
-    return typeof window !== 'undefined' && !sessionStorage.getItem('rajwada_demo_alert_seen');
-  });
-
-  useEffect(() => {
-    const handleDemoState = (e) => {
-      const isOpen = e.detail?.isOpen ?? !sessionStorage.getItem('rajwada_demo_alert_seen');
-      setIsDemoAlertOpen(isOpen);
-    };
-    window.addEventListener('rajwada_demo_state_change', handleDemoState);
-    return () => window.removeEventListener('rajwada_demo_state_change', handleDemoState);
-  }, []);
-
   const isActive = (to) => {
     if (to === '/') return location.pathname === '/';
     return location.pathname.startsWith(to);
@@ -81,22 +68,19 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${navbarBg} ${
-          isDemoAlertOpen ? 'hidden opacity-0 pointer-events-none' : ''
-        }`}
-        style={isDemoAlertOpen ? { display: 'none' } : {}}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${navbarBg}`}
         role="navigation"
         aria-label="Main navigation"
       >
         <div className="container-custom">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* ── Logo ── */}
-            <Link to="/" className="flex flex-col leading-none group" aria-label="Rajwada Palace Hotel home">
+            <Link to="/" className="flex flex-col leading-none group" aria-label="JoshiWada Palace Hotel home">
               <span
                 className={`font-bold text-xl md:text-2xl tracking-[0.3em] transition-colors duration-500 ${logoColor}`}
                 style={{ fontFamily: "'Cinzel', 'Palatino Linotype', serif" }}
               >
-                RAJWADA
+                JOSHIWADA
               </span>
               <span
                 className={`text-[0.45rem] md:text-[0.5rem] tracking-[0.35em] uppercase transition-colors duration-500 ${

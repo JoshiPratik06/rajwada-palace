@@ -35,7 +35,7 @@ const cartReducer = (state, action) => {
 
 const coupons = {
   'ROYAL10': { discount: 10, type: 'percent', label: '10% Off' },
-  'RAJWADA20': { discount: 20, type: 'percent', label: '20% Off' },
+  'JOSHIWADA20': { discount: 20, type: 'percent', label: '20% Off' },
   'FLAT100': { discount: 100, type: 'flat', label: '₹100 Off' },
   'WELCOME50': { discount: 50, type: 'flat', label: '₹50 Off' },
 };

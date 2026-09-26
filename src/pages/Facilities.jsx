@@ -79,7 +79,7 @@ export default function Facilities() {
             transition={{ duration: 0.6, delay: 0.45 }}
             className="text-gray-300 max-w-xl mx-auto"
           >
-            Every facility at Rajwada is designed to elevate your experience and ensure your comfort, convenience, and joy.
+            Every facility at JoshiWada is designed to elevate your experience and ensure your comfort, convenience, and joy.
           </motion.p>
         </div>
       </section>
@@ -163,7 +163,7 @@ export default function Facilities() {
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <h2 className="text-3xl font-bold text-white font-[Cinzel,serif] mb-3">Why Choose Rajwada?</h2>
+            <h2 className="text-3xl font-bold text-white font-[Cinzel,serif] mb-3">Why Choose JoshiWada?</h2>
             <div className="h-[2px] w-16 bg-[#c5a059] mx-auto" />
           </motion.div>
           <motion.div
@@ -214,7 +214,7 @@ export default function Facilities() {
               <p className="text-[#c5a059] font-medium tracking-widest uppercase text-sm mb-3">Ready to Experience?</p>
               <h2 className="text-4xl font-bold text-white font-[Cinzel,serif] mb-4">Plan Your Visit</h2>
               <p className="text-gray-400 mb-8 max-w-lg mx-auto">
-                Immerse yourself in a world where every facility is a masterpiece and every service a memory. Book your stay at Rajwada Palace today.
+                Immerse yourself in a world where every facility is a masterpiece and every service a memory. Book your stay at JoshiWada Palace today.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link to="/booking" className="btn-primary inline-flex items-center gap-2">

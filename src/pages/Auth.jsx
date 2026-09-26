@@ -106,7 +106,7 @@ export default function Auth() {
   const handleQuickDemoLogin = () => {
     setLoading(true);
     setTimeout(() => {
-      const res = login({ email: 'guest@rajwada.com', password: 'password123' });
+      const res = login({ email: 'guest@joshiwada.com', password: 'password123' });
       setLoading(false);
       if (res.success) {
         handleAuthSuccess();
@@ -132,7 +132,7 @@ export default function Auth() {
               Royal Heritage
             </span>
             <h2 className="text-2xl md:text-3xl font-bold font-serif leading-tight">
-              Rajwada Palace Portal
+              JoshiWada Palace Portal
             </h2>
             <div className="w-12 h-0.5 bg-[#c5a059] my-4" />
             <p className="text-gray-300 text-sm leading-relaxed mb-6">
@@ -188,7 +188,7 @@ export default function Auth() {
                 1-Click Sign In
               </button>
             </div>
-            <p className="text-[11px] text-gray-300 font-mono">guest@rajwada.com / password123</p>
+            <p className="text-[11px] text-gray-300 font-mono">guest@joshiwada.com / password123</p>
           </div>
         </div>
 

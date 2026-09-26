@@ -279,7 +279,7 @@ export default function Reviews() {
                   <span className="font-bold text-[#0f1f3d]">4.8 / 5.0</span>
                 </div>
                 <div className="flex justify-between items-center py-1">
-                  <span className="text-gray-600">Location (Rajwada)</span>
+                  <span className="text-gray-600">Location (Shivajinagar, Pune)</span>
                   <span className="font-bold text-[#0f1f3d]">5.0 / 5.0</span>
                 </div>
               </div>
@@ -470,7 +470,7 @@ export default function Reviews() {
           <div className="gold-line" />
           <p className="text-gray-300 text-sm md:text-base max-w-xl mx-auto mb-8">
             Experience heritage architecture, curated culinary experiences, and uncompromised luxury
-            in the heart of Indore.
+            in the heart of Shivajinagar, Pune.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link to="/booking" className="btn-primary">

@@ -22,10 +22,10 @@ const stats = [
 ];
 
 const team = [
-  { name: 'Vikram Holkar', role: 'Managing Director', initials: 'VH', color: '#0f1f3d', bio: 'A visionary hotelier with 25 years of experience, Vikram leads Rajwada with a deep respect for heritage and a passion for world-class service.' },
+  { name: 'Vikram Joshi', role: 'Managing Director', initials: 'VJ', color: '#0f1f3d', bio: 'A visionary hotelier with 25 years of experience, Vikram leads JoshiWada with a deep respect for heritage and a passion for world-class service.' },
   { name: 'Priya Sharma', role: 'Executive Chef', initials: 'PS', color: '#c5a059', bio: 'Trained at Le Cordon Bleu and ITC hotels, Chef Priya crafts culinary experiences that blend royal Indian traditions with modern gastronomy.' },
-  { name: 'Rajan Mehta', role: 'Head of Operations', initials: 'RM', color: '#0f1f3d', bio: 'With operational expertise across five-star properties, Rajan ensures every guest experience at Rajwada runs with seamless precision.' },
-  { name: 'Ananya Kapoor', role: 'Spa Director', initials: 'AK', color: '#c5a059', bio: 'An Ayurveda practitioner and wellness expert, Ananya curates holistic spa journeys inspired by ancient royal rituals of Madhya Pradesh.' },
+  { name: 'Rajan Mehta', role: 'Head of Operations', initials: 'RM', color: '#0f1f3d', bio: 'With operational expertise across five-star properties, Rajan ensures every guest experience at JoshiWada runs with seamless precision.' },
+  { name: 'Ananya Kapoor', role: 'Spa Director', initials: 'AK', color: '#c5a059', bio: 'An Ayurveda practitioner and wellness expert, Ananya curates holistic spa journeys inspired by ancient royal rituals of Maharashtra.' },
 ];
 
 const awards = [
@@ -37,8 +37,8 @@ const awards = [
 ];
 
 const values = [
-  { icon: '👑', title: 'Royal Heritage', desc: 'Inspired by the Holkar dynasty, every corner of Rajwada Palace pays homage to the rich cultural and architectural heritage of Madhya Pradesh. We preserve tradition while delivering modern luxury.' },
-  { icon: '🍽️', title: 'Culinary Excellence', desc: 'Our kitchens celebrate India\'s diverse food culture — from age-old Indori street recipes to grand Mughal banquet feasts. Every dish is crafted with love, local produce, and culinary mastery.' },
+  { icon: '👑', title: 'Royal Heritage', desc: 'Inspired by royal Maratha heritage, every corner of JoshiWada Palace pays homage to the rich cultural and architectural heritage of Maharashtra. We preserve tradition while delivering modern luxury.' },
+  { icon: '🍽️', title: 'Culinary Excellence', desc: 'Our kitchens celebrate India\'s diverse food culture — from authentic Maharashtrian delicacies to grand royal banquet feasts. Every dish is crafted with love, local produce, and culinary mastery.' },
   { icon: '🤝', title: 'Guest First', desc: 'Every decision we make starts and ends with our guests. We believe that extraordinary hospitality is not a service but an art form, and our team dedicates itself to making every moment special.' },
 ];
 
@@ -99,13 +99,13 @@ export default function About() {
             </h2>
             <div className="h-[2px] w-16 bg-[#c5a059] mb-6" />
             <p className="text-gray-600 leading-relaxed mb-5">
-              Founded in 2009, Rajwada Palace Hotel draws its soul from the legendary Holkar dynasty — the Maratha rulers who built the iconic Rajwada Palace of Indore. Nestled in the heart of the city, just steps away from that magnificent 18th-century landmark, our hotel was conceived as a tribute to the grandeur, culture, and warmth of Indore.
+              Founded in 2009, JoshiWada Palace Hotel draws its soul from the legendary heritage of Maharashtra. Nestled in the heart of Shivajinagar, Pune, our hotel was conceived as a tribute to the grandeur, culture, and warmth of Pune.
             </p>
             <p className="text-gray-600 leading-relaxed mb-5">
-              Our founders envisioned a space where the opulence of Maratha royalty meets the comfort of modern luxury — where every guest is treated not as a visitor, but as a member of the royal family. From the hand-carved marble interiors to the gold-leaf accents that adorn our hallways, every detail at Rajwada tells the story of a civilization that celebrated beauty, art, and hospitality.
+              Our founders envisioned a space where the opulence of royal heritage meets the comfort of modern luxury — where every guest is treated not as a visitor, but as a member of the royal family. From the hand-carved marble interiors to the gold-leaf accents that adorn our hallways, every detail at JoshiWada tells the story of a culture that celebrated beauty, art, and hospitality.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Over 15 years, we have grown from a boutique heritage hotel into one of Indore's most celebrated five-star destinations — yet our founding philosophy remains unchanged: to offer every guest an experience worthy of royalty.
+              Over 15 years, we have grown from a boutique heritage hotel into one of Pune's most celebrated five-star destinations — yet our founding philosophy remains unchanged: to offer every guest an experience worthy of royalty.
             </p>
           </motion.div>
 
@@ -118,7 +118,7 @@ export default function About() {
           >
             {[
               { label: 'Our Mission', text: 'To deliver an unmatched hospitality experience rooted in Indian culture, royal heritage, and genuine warmth — making every guest\'s stay a treasured memory.' },
-              { label: 'Our Vision', text: 'To be the most celebrated heritage luxury hotel in Central India, recognized globally for authenticity, culinary excellence, and exceptional guest care.' },
+              { label: 'Our Vision', text: 'To be the most celebrated heritage luxury hotel in Maharashtra, recognized globally for authenticity, culinary excellence, and exceptional guest care.' },
               { label: 'Our Promise', text: 'From the moment you arrive to the moment you depart, we commit to anticipating your needs, exceeding your expectations, and leaving you with a deep desire to return.' },
               { label: 'Our Culture', text: 'We are a team of passionate hospitality professionals who believe that the true luxury is not in things, but in moments — and we dedicate ourselves to crafting those moments daily.' },
             ].map((item, i) => (
@@ -286,7 +286,7 @@ export default function About() {
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <p className="text-[#c5a059] font-medium tracking-widest uppercase text-sm mb-3">A Glimpse of Rajwada</p>
+            <p className="text-[#c5a059] font-medium tracking-widest uppercase text-sm mb-3">A Glimpse of JoshiWada</p>
             <h2 className="section-title">Through Our Lens</h2>
             <div className="gold-line" />
           </motion.div>
@@ -349,7 +349,7 @@ export default function About() {
             <p className="text-[#c5a059] tracking-widest uppercase text-sm mb-3">Experience Royal Hospitality</p>
             <h2 className="text-4xl font-bold text-white font-[Cinzel,serif] mb-6">Begin Your Royal Journey</h2>
             <p className="text-gray-400 mb-8 max-w-xl mx-auto">
-              Every stay at Rajwada Palace is a chapter in a story of luxury, heritage, and warmth. Let us write yours.
+              Every stay at JoshiWada Palace is a chapter in a story of luxury, heritage, and warmth. Let us write yours.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/booking" className="btn-primary inline-flex items-center gap-2">

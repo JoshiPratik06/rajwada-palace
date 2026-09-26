@@ -103,7 +103,7 @@ const Home = () => {
     await new Promise((r) => setTimeout(r, 900));
     setSubscribing(false);
     setEmail('');
-    toast.success('🎉 Subscribed! Welcome to Rajwada updates.');
+    toast.success('🎉 Subscribed! Welcome to JoshiWada updates.');
   };
 
   const today = new Date();
@@ -135,7 +135,7 @@ const Home = () => {
           {/* Decorative line */}
           <motion.div variants={fadeUp} className="flex items-center gap-4">
             <div className="h-px w-16 bg-[#c5a059]" />
-            <span className="text-[#c5a059] text-xs tracking-[0.35em] uppercase font-medium">Est. 2009 · Indore</span>
+            <span className="text-[#c5a059] text-xs tracking-[0.35em] uppercase font-medium">Est. 2009 · Shivajinagar, Pune</span>
             <div className="h-px w-16 bg-[#c5a059]" />
           </motion.div>
 
@@ -145,7 +145,7 @@ const Home = () => {
             className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-white tracking-widest leading-none"
             style={{ fontFamily: 'Cinzel, serif', textShadow: '0 4px 30px rgba(0,0,0,0.4)' }}
           >
-            RAJWADA
+            JOSHIWADA
           </motion.h1>
 
           {/* Sub-line */}
@@ -153,7 +153,7 @@ const Home = () => {
             variants={fadeUp}
             className="text-[#c5a059] text-sm sm:text-base md:text-lg tracking-[0.2em] uppercase font-light"
           >
-            A Legacy of Royal Hospitality &nbsp;·&nbsp; Indore
+            A Legacy of Royal Hospitality &nbsp;·&nbsp; Shivajinagar, Pune
           </motion.p>
 
           {/* Buttons */}
@@ -320,7 +320,7 @@ const Home = () => {
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className="h-px w-10 bg-[#c5a059]" />
-                <span className="text-[#c5a059] text-xs tracking-[0.3em] uppercase">About Rajwada Palace</span>
+                <span className="text-[#c5a059] text-xs tracking-[0.3em] uppercase">About JoshiWada Palace</span>
               </div>
 
               <h2
@@ -333,7 +333,7 @@ const Home = () => {
               <div className="h-px w-20 bg-[#c5a059] mb-6" />
 
               <p className="text-white/70 text-base leading-relaxed mb-4">
-                Nestled in the heart of Indore, Rajwada Palace Hotel is a tribute to the city's regal history. Our hotel blends the grandeur of Maratha architecture with the finest contemporary comforts.
+                Nestled in the heart of Shivajinagar, Pune, JoshiWada Palace Hotel is a tribute to royal heritage and timeless luxury. Our hotel blends architectural grandeur with the finest contemporary comforts.
               </p>
               <p className="text-white/70 text-base leading-relaxed">
                 From the moment you step through our doors, you are welcomed into a world of personalized service, exquisite dining, and unmatched elegance. Every detail has been curated to ensure your stay is nothing short of extraordinary.
@@ -408,7 +408,7 @@ const Home = () => {
           >
             <div className="flex items-center gap-3 mb-5">
               <div className="h-px w-10 bg-[#c5a059]" />
-              <span className="text-[#c5a059] text-xs tracking-[0.3em] uppercase font-medium">Rajwada Dining</span>
+              <span className="text-[#c5a059] text-xs tracking-[0.3em] uppercase font-medium">JoshiWada Dining</span>
             </div>
 
             <h2
@@ -424,7 +424,7 @@ const Home = () => {
               Our award-winning restaurant takes you on a culinary journey across India. From the rich gravies of the North to the subtle flavors of the South, every dish is a celebration of authentic recipes, fresh ingredients, and expert craftsmanship.
             </p>
             <p className="text-gray-600 leading-relaxed mb-8">
-              Experience the magic of a royal spread — tandoori delicacies, slow-cooked biryanis, and indulgent desserts, all served in an ambiance that reflects the splendor of Indore's heritage.
+              Experience the magic of a royal spread — tandoori delicacies, slow-cooked biryanis, and indulgent desserts, all served in an ambiance that reflects the splendor of royal heritage.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -493,7 +493,7 @@ const Home = () => {
         <div className="container-custom">
           <SectionHeader
             title="Guest Experiences"
-            subtitle="Hear from our cherished guests about their unforgettable stays at Rajwada Palace Hotel."
+            subtitle="Hear from our cherished guests about their unforgettable stays at JoshiWada Palace Hotel."
           />
 
           <motion.div
@@ -616,7 +616,7 @@ const Home = () => {
         <div className="container-custom">
           <SectionHeader
             title="Our Gallery"
-            subtitle="A visual journey through the splendor and grandeur of Rajwada Palace Hotel."
+            subtitle="A visual journey through the splendor and grandeur of JoshiWada Palace Hotel."
           />
 
           {/* Masonry-style grid */}
@@ -688,7 +688,7 @@ const Home = () => {
                 </h2>
                 <div className="h-px w-16 bg-[#c5a059] mb-4" />
                 <p className="text-gray-500 mb-6 text-sm leading-relaxed">
-                  Subscribe to receive exclusive offers, seasonal packages, and updates from Rajwada Palace Hotel directly in your inbox.
+                  Subscribe to receive exclusive offers, seasonal packages, and updates from JoshiWada Palace Hotel directly in your inbox.
                 </p>
 
                 <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3">
@@ -728,7 +728,7 @@ const Home = () => {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-[#0f1f3d]">Address</p>
-                    <p className="text-gray-500 text-sm">Near Rajwada Palace, Old Palasia, Indore, Madhya Pradesh 452001, India</p>
+                    <p className="text-gray-500 text-sm">Shivajinagar, Pune, Maharashtra 411005, India</p>
                   </div>
                 </div>
 
@@ -738,12 +738,12 @@ const Home = () => {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-[#0f1f3d]">Phone</p>
-                    <a href="tel:+917312345678" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
-                      +91 731 234 5678
+                    <a href="tel:+912025501234" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
+                      +91 20 2550 1234
                     </a>
                     <br />
-                    <a href="tel:+918005678901" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
-                      +91 800 567 8901
+                    <a href="tel:+912025505678" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
+                      +91 20 2550 5678
                     </a>
                   </div>
                 </div>
@@ -754,12 +754,12 @@ const Home = () => {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-[#0f1f3d]">Email</p>
-                    <a href="mailto:reservations@rajwadapalace.in" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
-                      reservations@rajwadapalace.in
+                    <a href="mailto:reservations@joshiwada.com" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
+                      reservations@joshiwada.com
                     </a>
                     <br />
-                    <a href="mailto:info@rajwadapalace.in" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
-                      info@rajwadapalace.in
+                    <a href="mailto:info@joshiwada.com" className="text-gray-500 text-sm hover:text-[#c5a059] transition-colors">
+                      info@joshiwada.com
                     </a>
                   </div>
                 </div>
@@ -775,14 +775,14 @@ const Home = () => {
               className="rounded-2xl overflow-hidden card-shadow min-h-[380px]"
             >
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.9563456789012!2d75.85701!3d22.71888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fcad1b410ddb%3A0x96b54d72d0b59816!2sRajwada%2C%20Indore%2C%20Madhya%20Pradesh!5e0!3m2!1sen!2sin!4v1234567890"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.986877993437!2d73.8447!3d18.5314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c0792d4b9b9d%3A0xa621532168d1f2b6!2sShivajinagar%2C%20Pune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1234567890"
                 width="100%"
                 height="100%"
                 style={{ border: 0, minHeight: '380px' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Rajwada Palace Hotel Location"
+                title="JoshiWada Palace Hotel Location"
               />
             </motion.div>
           </div>
