@@ -38,6 +38,19 @@ const Navbar = () => {
     };
   }, [menuOpen]);
 
+  const [isDemoAlertOpen, setIsDemoAlertOpen] = useState(() => {
+    return typeof window !== 'undefined' && !sessionStorage.getItem('rajwada_demo_alert_seen');
+  });
+
+  useEffect(() => {
+    const handleDemoState = (e) => {
+      const isOpen = e.detail?.isOpen ?? !sessionStorage.getItem('rajwada_demo_alert_seen');
+      setIsDemoAlertOpen(isOpen);
+    };
+    window.addEventListener('rajwada_demo_state_change', handleDemoState);
+    return () => window.removeEventListener('rajwada_demo_state_change', handleDemoState);
+  }, []);
+
   const isActive = (to) => {
     if (to === '/') return location.pathname === '/';
     return location.pathname.startsWith(to);
@@ -68,7 +81,10 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${navbarBg}`}
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${navbarBg} ${
+          isDemoAlertOpen ? 'hidden opacity-0 pointer-events-none' : ''
+        }`}
+        style={isDemoAlertOpen ? { display: 'none' } : {}}
         role="navigation"
         aria-label="Main navigation"
       >

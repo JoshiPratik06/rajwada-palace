@@ -274,3 +274,20 @@ h1, h2, h3, h4 {
 .react-datepicker__day:hover {
   background-color: #f5f0e8 !important;
 }
+
+/* Modal Open: Completely Lock Background Scroll & Hide Navbar */
+body.demo-modal-open {
+  overflow: hidden !important;
+  position: relative !important;
+  touch-action: none !important;
+}
+html.demo-modal-open {
+  overflow: hidden !important;
+}
+body.demo-modal-open nav {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
