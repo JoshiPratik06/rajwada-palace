@@ -1,0 +1,276 @@
+@import "tailwindcss";
+
+@theme {
+  --color-palace-navy: #0f1f3d;
+  --color-palace-navy-light: #1a3260;
+  --color-palace-gold: #c5a059;
+  --color-palace-gold-light: #d4b472;
+  --color-palace-cream: #fdfaf1;
+  --color-palace-cream-dark: #f5f0e8;
+  --font-serif: 'Cinzel', serif;
+  --font-sans: 'Poppins', sans-serif;
+}
+
+:root {
+  --navy: #0f1f3d;
+  --navy-light: #1a3260;
+  --gold: #c5a059;
+  --gold-light: #d4b472;
+  --cream: #fdfaf1;
+  --cream-dark: #f5f0e8;
+}
+
+* {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fdfaf1;
+  color: #1a1a2e;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+}
+
+/* Custom helper classes */
+.btn-primary {
+  background-color: #c5a059 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.125rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+.btn-primary:hover {
+  background-color: #b08a44 !important;
+}
+
+.btn-secondary {
+  border: 2px solid #c5a059 !important;
+  color: #c5a059 !important;
+  background-color: transparent !important;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.125rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-secondary:hover {
+  background-color: #c5a059 !important;
+  color: #ffffff !important;
+}
+
+.btn-dark {
+  background-color: #0f1f3d !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.125rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+.btn-dark:hover {
+  background-color: #1a3260 !important;
+}
+
+.section-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #0f1f3d;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+}
+
+.gold-line {
+  height: 2px;
+  width: 4rem;
+  background-color: #c5a059;
+  margin: 0 auto 1.5rem auto;
+}
+
+.gold-line-left {
+  height: 2px;
+  width: 4rem;
+  background-color: #c5a059;
+  margin-bottom: 1.5rem;
+}
+
+.card-shadow {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+.card-shadow:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.input-field {
+  width: 100%;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: #ffffff;
+  color: #1f2937;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input-field:focus {
+  outline: none;
+  border-color: #c5a059;
+  box-shadow: 0 0 0 1px #c5a059;
+}
+
+.input-icon-left {
+  padding-left: 2.75rem !important;
+}
+
+.input-icon-right {
+  padding-right: 2.75rem !important;
+}
+
+.section-padding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.container-custom {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.badge-veg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #86efac;
+  border-radius: 0.25rem;
+}
+
+.badge-nonveg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  border-radius: 0.25rem;
+}
+
+.glass {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.room-card {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid #f3f4f6;
+}
+.room-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #c5a059; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #0f1f3d; }
+
+/* React Datepicker styling */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+.react-datepicker__input-container input {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  background-color: #fff;
+  color: #1a1a2e;
+}
+.react-datepicker__header {
+  background-color: #0f1f3d !important;
+  color: #fff !important;
+  border-bottom: 1px solid #c5a059 !important;
+}
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header {
+  color: #c5a059 !important;
+  font-family: 'Cinzel', serif !important;
+}
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #c5a059 !important;
+  color: #fff !important;
+}
+.react-datepicker__day:hover {
+  background-color: #f5f0e8 !important;
+}
